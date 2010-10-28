@@ -1,7 +1,5 @@
 package org.jreflect;
 
-import static org.jreflect.ReflectionHelper.getValueFromField;
-
 public class RFieldWithTargetAndType<T> {
 	private final String name;
 	private final Object targetObject;
@@ -12,6 +10,6 @@ public class RFieldWithTargetAndType<T> {
 	}
 
 	public T getValue() {
-		return getValueFromField(targetObject, name);
+		return ReflectionHelper.<T> getValueFromField(targetObject, name);
 	}
 }
