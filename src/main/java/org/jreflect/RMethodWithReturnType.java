@@ -9,6 +9,11 @@ public class RMethodWithReturnType<ReturnType> {
 		this.returnType = returnType;
 	}
 
+	public RMethodWithReturnTypeAndTarget<ReturnType> in(Class<?> targetClass) {
+		return new RMethodWithReturnTypeAndTarget<ReturnType>(name, returnType,
+				targetClass);
+	}
+
 	public RMethodWithReturnTypeAndTarget<ReturnType> in(Object targetObject) {
 		return new RMethodWithReturnTypeAndTarget<ReturnType>(name, returnType,
 				targetObject);

@@ -33,6 +33,20 @@ public abstract class ReflectionHelper {
 		}
 	}
 
+	public static void invokeVoidMethod(Class<?> targetClass,
+			String methodName, Object... args) {
+		Method targetMethod = getAccessibleMethod(targetClass, methodName, args);
+		try {
+			targetMethod.invoke(null, args);
+		} catch (IllegalArgumentException e) {
+			throw new RuntimeException(e);
+		} catch (IllegalAccessException e) {
+			throw new RuntimeException(e);
+		} catch (InvocationTargetException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
 	public static void invokeVoidMethod(Object targetObject, String methodName,
 			Object... args) {
 		Method targetMethod = getAccessibleMethod(targetObject, methodName,
@@ -65,6 +79,22 @@ public abstract class ReflectionHelper {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
+	public static <ReturnType> ReturnType invokeValueReturningMethod(
+			Class<?> targetClass, String methodName,
+			Class<ReturnType> returnType, Object... args) {
+		Method targetMethod = getAccessibleMethod(targetClass, methodName, args);
+		try {
+			return (ReturnType) targetMethod.invoke(null, args);
+		} catch (IllegalArgumentException e) {
+			throw new RuntimeException(e);
+		} catch (IllegalAccessException e) {
+			throw new RuntimeException(e);
+		} catch (InvocationTargetException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
 	private static Field getAccessibleField(Object targetObject,
 			String fieldName) {
 		Class<? extends Object> targetClass = targetObject.getClass();
@@ -84,7 +114,11 @@ public abstract class ReflectionHelper {
 
 	private static Method getAccessibleMethod(Object targetObject,
 			String methodName, Object[] args) {
-		Class<? extends Object> targetClass = targetObject.getClass();
+		return getAccessibleMethod(targetObject.getClass(), methodName, args);
+	}
+
+	private static Method getAccessibleMethod(Class<?> targetClass,
+			String methodName, Object[] args) {
 		Arguments arguments = new Arguments(args);
 		Method targetMethod = null;
 		try {

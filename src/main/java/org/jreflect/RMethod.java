@@ -7,6 +7,10 @@ public class RMethod {
 		this.name = name;
 	}
 
+	public RMethodWithTarget in(Class<?> targetClass) {
+		return new RMethodWithTarget(name, targetClass);
+	}
+
 	public RMethodWithTarget in(Object targetObject) {
 		return new RMethodWithTarget(name, targetObject);
 	}

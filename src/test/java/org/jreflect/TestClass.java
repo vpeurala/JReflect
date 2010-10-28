@@ -8,6 +8,18 @@ public class TestClass {
 	private boolean methodWithParametersAndNoReturnValueCalled;
 	private boolean methodWithParametersAndReturnValueCalled;
 
+	private static void staticMethodWithParametersAndNoReturnValue(byte b,
+			short s, char c, int i, long l, float f, double d, boolean bool,
+			Object o) {
+		System.out.println("" + b + s + c + i + l + f + d + bool + o);
+	}
+
+	private static Object staticMethodWithParametersAndReturnValue(byte b,
+			short s, char c, int i, long l, float f, double d, boolean bool,
+			Object o) {
+		return "" + b + s + c + i + l + f + d + bool + o;
+	}
+
 	private void methodWithNoParametersAndNoReturnValue() {
 		methodWithNoParametersAndNoReturnValueCalled = true;
 	}

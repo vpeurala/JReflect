@@ -68,6 +68,21 @@ public class JReflectTest {
 		assertMethodInvoked(methodName);
 	}
 
+	@Test
+	public void canInvokeStaticMethodWithNoReturnValue() {
+		method("staticMethodWithParametersAndNoReturnValue")
+				.in(TestClass.class).invoke((byte) 1, (short) 2, '3', 4, 5l,
+						6f, 7d, true, "foo");
+	}
+
+	@Test
+	public void canInvokeStaticMethodWithReturnValue() {
+		String value = method("staticMethodWithParametersAndReturnValue")
+				.withReturnType(String.class).in(TestClass.class)
+				.invoke((byte) 1, (short) 2, '3', 4, 5l, 6f, 7d, true, "foo");
+		assertEquals("123456.07.0truefoo", value);
+	}
+
 	private void assertMethodInvoked(String methodName) {
 		assertTrue(field(methodName + "Called").ofType(Boolean.class)
 				.in(targetObject).getValue());
