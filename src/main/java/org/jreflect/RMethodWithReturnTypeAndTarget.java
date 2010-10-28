@@ -1,39 +1,37 @@
 package org.jreflect;
 
-import static org.jreflect.ReflectionHelper.invokeValueReturningMethod;
+import static org.jreflect.ReflectionEngine.invokeValueReturningMethod;
 
 public class RMethodWithReturnTypeAndTarget<ReturnType> {
-	private final String name;
-	private final Class<ReturnType> returnType;
-	private final Object targetObject;
-	private final Class<?> targetClass;
+    private final String name;
+    private final Object targetObject;
+    private final Class<?> targetClass;
 
-	public RMethodWithReturnTypeAndTarget(String name,
-			Class<ReturnType> returnType, Class<?> targetClass) {
-		this(name, returnType, null, targetClass);
-	}
+    public RMethodWithReturnTypeAndTarget(final String name,
+            final Class<?> targetClass) {
+        this(name, null, targetClass);
+    }
 
-	public RMethodWithReturnTypeAndTarget(String name,
-			Class<ReturnType> returnType, Object targetObject) {
-		this(name, returnType, targetObject, null);
-	}
+    public RMethodWithReturnTypeAndTarget(final String name,
+            final Object targetObject) {
+        this(name, targetObject, null);
+    }
 
-	private RMethodWithReturnTypeAndTarget(String name,
-			Class<ReturnType> returnType, Object targetObject,
-			Class<?> targetClass) {
-		this.name = name;
-		this.returnType = returnType;
-		this.targetObject = targetObject;
-		this.targetClass = targetClass;
-	}
+    private RMethodWithReturnTypeAndTarget(final String name,
+            final Object targetObject, final Class<?> targetClass) {
+        this.name = name;
+        this.targetObject = targetObject;
+        this.targetClass = targetClass;
+    }
 
-	public ReturnType invoke(Object... args) {
-		if (targetObject != null) {
-			return invokeValueReturningMethod(targetObject, name, returnType,
-					args);
-		} else {
-			return invokeValueReturningMethod(targetClass, name, returnType,
-					args);
-		}
-	}
+    @SuppressWarnings("unchecked")
+    public ReturnType invoke(final Object... args) {
+        if (targetObject != null) {
+            return (ReturnType) invokeValueReturningMethod(targetObject, name,
+                    args);
+        } else {
+            return (ReturnType) invokeValueReturningMethod(targetClass, name,
+                    args);
+        }
+    }
 }

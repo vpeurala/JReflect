@@ -1,21 +1,20 @@
 package org.jreflect;
 
 public class RMethodWithReturnType<ReturnType> {
-	private final String name;
-	private final Class<ReturnType> returnType;
+    private final String name;
 
-	public RMethodWithReturnType(String name, Class<ReturnType> returnType) {
-		this.name = name;
-		this.returnType = returnType;
-	}
+    public RMethodWithReturnType(final String name) {
+        this.name = name;
+    }
 
-	public RMethodWithReturnTypeAndTarget<ReturnType> in(Class<?> targetClass) {
-		return new RMethodWithReturnTypeAndTarget<ReturnType>(name, returnType,
-				targetClass);
-	}
+    public RMethodWithReturnTypeAndTarget<ReturnType> in(
+            final Class<?> targetClass) {
+        return new RMethodWithReturnTypeAndTarget<ReturnType>(name, targetClass);
+    }
 
-	public RMethodWithReturnTypeAndTarget<ReturnType> in(Object targetObject) {
-		return new RMethodWithReturnTypeAndTarget<ReturnType>(name, returnType,
-				targetObject);
-	}
+    public RMethodWithReturnTypeAndTarget<ReturnType> in(
+            final Object targetObject) {
+        return new RMethodWithReturnTypeAndTarget<ReturnType>(name,
+                targetObject);
+    }
 }
