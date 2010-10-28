@@ -2,7 +2,6 @@
 <classpath>
 	<classpathentry kind="src" path="src/main/java"/>
 	<classpathentry kind="src" path="src/test/java"/>
-	<classpathentry kind="lib" path="lib_managed/scala_2.7.7/compile/junit-4.8.2.jar"/>
 	<classpathentry kind="lib" path="project/boot/scala-2.7.7/lib/scala-compiler.jar"/>
 	<classpathentry kind="lib" path="project/boot/scala-2.7.7/lib/scala-library.jar"/>
 	<classpathentry kind="lib" path="project/boot/scala-2.7.7/org.scala-tools.sbt/sbt/0.7.4/classpath_2.7.7-0.7.4.jar"/>
@@ -21,5 +20,8 @@
 	<classpathentry kind="lib" path="project/boot/scala-2.7.7/org.scala-tools.sbt/sbt/0.7.4/test-interface-0.5.jar"/>
 	<classpathentry kind="lib" path="project/boot/scala-2.7.7/org.scala-tools.sbt/sbt/0.7.4/xsbti/interface-0.7.4.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="lib_managed/scala_2.7.7/test/junit-4.8.1.jar"/>
+	<classpathentry kind="lib" path="lib_managed/scala_2.7.7/test/junit-interface-0.5.jar"/>
+	<classpathentry kind="lib" path="lib_managed/scala_2.7.7/test/test-interface-0.5.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
