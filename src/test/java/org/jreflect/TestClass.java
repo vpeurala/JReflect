@@ -8,15 +8,17 @@ public class TestClass {
     private boolean methodWithParametersAndNoReturnValueCalled;
     private boolean methodWithParametersAndReturnValueCalled;
 
-    private static void staticMethodWithParametersAndNoReturnValue(byte b,
-            short s, char c, int i, long l, float f, double d, boolean bool,
-            Object o) {
+    private static void staticMethodWithParametersAndNoReturnValue(
+            final byte b, final short s, final char c, final int i,
+            final long l, final float f, final double d, final boolean bool,
+            final Object o) {
         System.out.println("" + b + s + c + i + l + f + d + bool + o);
     }
 
-    private static Object staticMethodWithParametersAndReturnValue(byte b,
-            short s, char c, int i, long l, float f, double d, boolean bool,
-            Object o) {
+    private static Object staticMethodWithParametersAndReturnValue(
+            final byte b, final short s, final char c, final int i,
+            final long l, final float f, final double d, final boolean bool,
+            final Object o) {
         return "" + b + s + c + i + l + f + d + bool + o;
     }
 
@@ -29,12 +31,13 @@ public class TestClass {
         return 1;
     }
 
-    private void methodWithParametersAndNoReturnValue(String s, int i, boolean b) {
+    private void methodWithParametersAndNoReturnValue(final String s,
+            final int i, final boolean b) {
         methodWithParametersAndNoReturnValueCalled = true;
     }
 
-    private Integer methodWithParametersAndReturnValue(long l, double d,
-            String a) {
+    private Integer methodWithParametersAndReturnValue(final long l,
+            final double d, final String a) {
         methodWithParametersAndReturnValueCalled = true;
         return 2;
     }

@@ -4,7 +4,7 @@ public class RFieldWithTargetAndType<T> {
     private final String name;
     private final Object targetObject;
 
-    public RFieldWithTargetAndType(String name, Object targetObject) {
+    public RFieldWithTargetAndType(final String name, final Object targetObject) {
         this.name = name;
         this.targetObject = targetObject;
     }
@@ -13,7 +13,7 @@ public class RFieldWithTargetAndType<T> {
         return ReflectionEngine.<T> getFieldValue(targetObject, name);
     }
 
-    public void setValue(T value) {
+    public void setValue(final T value) {
         ReflectionEngine.setFieldValue(targetObject, name, value);
     }
 }

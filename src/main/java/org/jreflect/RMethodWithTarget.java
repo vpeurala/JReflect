@@ -7,22 +7,22 @@ public class RMethodWithTarget {
     private final Object targetObject;
     private final Class<?> targetClass;
 
-    public RMethodWithTarget(String name, Class<?> targetClass) {
+    public RMethodWithTarget(final String name, final Class<?> targetClass) {
         this(name, null, targetClass);
     }
 
-    public RMethodWithTarget(String name, Object targetObject) {
+    public RMethodWithTarget(final String name, final Object targetObject) {
         this(name, targetObject, null);
     }
 
-    private RMethodWithTarget(String name, Object targetObject,
-            Class<?> targetClass) {
+    private RMethodWithTarget(final String name, final Object targetObject,
+            final Class<?> targetClass) {
         this.name = name;
         this.targetObject = targetObject;
         this.targetClass = targetClass;
     }
 
-    public void invoke(Object... args) {
+    public void invoke(final Object... args) {
         if (targetObject != null) {
             invokeVoidMethod(targetObject, name, args);
         } else {

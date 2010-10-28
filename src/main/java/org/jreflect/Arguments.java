@@ -75,7 +75,8 @@ class Arguments {
     }
 
     private boolean isExactOrCoercablePrimitiveVersionOf(
-            final Class<?> possiblePrimitiveType, final Class<?> possibleWrapperType) {
+            final Class<?> possiblePrimitiveType,
+            final Class<?> possibleWrapperType) {
         if (!possiblePrimitiveType.isPrimitive()) {
             return false;
         }

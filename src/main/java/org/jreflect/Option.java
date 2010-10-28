@@ -43,7 +43,7 @@ public abstract class Option<T> {
         @Override
         public T getValue() {
             throw new UnsupportedOperationException(
-                    "Option.None has no value, so you cannot invoke getValue() on it!");
+            "Option.None has no value, so you cannot invoke getValue() on it!");
         }
 
         @Override

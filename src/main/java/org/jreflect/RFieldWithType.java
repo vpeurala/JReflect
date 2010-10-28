@@ -3,11 +3,11 @@ package org.jreflect;
 public class RFieldWithType<T> {
     private final String name;
 
-    public RFieldWithType(String name) {
+    public RFieldWithType(final String name) {
         this.name = name;
     }
 
-    public RFieldWithTargetAndType<T> in(Object targetObject) {
+    public RFieldWithTargetAndType<T> in(final Object targetObject) {
         return new RFieldWithTargetAndType<T>(name, targetObject);
     }
 }

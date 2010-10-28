@@ -7,7 +7,7 @@ public class RFieldWithTarget {
     private final String name;
     private final Object targetObject;
 
-    public RFieldWithTarget(String name, Object targetObject) {
+    public RFieldWithTarget(final String name, final Object targetObject) {
         this.name = name;
         this.targetObject = targetObject;
     }
@@ -16,7 +16,7 @@ public class RFieldWithTarget {
         return getFieldValue(targetObject, name);
     }
 
-    public void setValue(Object value) {
+    public void setValue(final Object value) {
         setFieldValue(targetObject, name, value);
     }
 }
