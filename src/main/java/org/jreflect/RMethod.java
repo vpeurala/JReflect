@@ -10,4 +10,9 @@ public class RMethod {
 	public RMethodWithTarget in(Object targetObject) {
 		return new RMethodWithTarget(name, targetObject);
 	}
+
+	public <ReturnType> RMethodWithReturnType<ReturnType> withReturnType(
+			Class<ReturnType> returnType) {
+		return new RMethodWithReturnType<ReturnType>(name, returnType);
+	}
 }

@@ -3,6 +3,7 @@ package org.jreflect;
 import static org.jreflect.JReflect.field;
 import static org.jreflect.JReflect.method;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
@@ -37,7 +38,22 @@ public class JReflectTest {
 
 	@Test
 	public void canInvokeMethodWithNoParametersAndNoReturnValue() {
-		method("methodWithNoParametersAndNoReturnValue").in(targetObject)
-				.invoke();
+		final String methodName = "methodWithNoParametersAndNoReturnValue";
+		method(methodName).in(targetObject).invoke();
+		assertMethodInvoked(methodName);
+	}
+
+	@Test
+	public void canInvokeMethodWithNoParametersAndIntReturnValue() {
+		final String methodName = "methodWithNoParametersAndIntReturnValue";
+		int value = method(methodName).withReturnType(Integer.class)
+				.in(targetObject).invoke();
+		assertEquals(1, value);
+		assertMethodInvoked(methodName);
+	}
+
+	private void assertMethodInvoked(String methodName) {
+		assertTrue(field(methodName + "Called").ofType(Boolean.class)
+				.in(targetObject).getValue());
 	}
 }

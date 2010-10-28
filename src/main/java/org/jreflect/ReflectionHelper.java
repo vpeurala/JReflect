@@ -44,6 +44,21 @@ public abstract class ReflectionHelper {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
+	public static <ReturnType> ReturnType invokeMethod(Object targetObject,
+			String methodName, Class<ReturnType> returnType) {
+		Method targetMethod = getAccessibleMethod(targetObject, methodName);
+		try {
+			return (ReturnType) targetMethod.invoke(targetObject);
+		} catch (IllegalArgumentException e) {
+			throw new RuntimeException(e);
+		} catch (IllegalAccessException e) {
+			throw new RuntimeException(e);
+		} catch (InvocationTargetException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
 	private static Field getAccessibleField(Object targetObject,
 			String fieldName) {
 		Class<? extends Object> targetClass = targetObject.getClass();
@@ -77,5 +92,4 @@ public abstract class ReflectionHelper {
 		}
 		return targetMethod;
 	}
-
 }
