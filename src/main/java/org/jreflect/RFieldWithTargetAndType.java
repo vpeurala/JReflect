@@ -12,4 +12,8 @@ public class RFieldWithTargetAndType<T> {
 	public T getValue() {
 		return ReflectionHelper.<T> getValueFromField(targetObject, name);
 	}
+
+	public void setValue(T value) {
+		ReflectionHelper.setValueOnField(targetObject, name, value);
+	}
 }

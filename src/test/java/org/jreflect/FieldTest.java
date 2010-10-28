@@ -19,4 +19,18 @@ public class FieldTest {
 				.getValue();
 		assertEquals(0, value);
 	}
+
+	@Test
+	public void canSetFieldValueAsUntypedObject() {
+		field("intField").in(targetObject).setValue(1);
+		assertEquals(1, field("intField").in(targetObject).getValue());
+	}
+
+	@Test
+	public void canSetFieldValueAsTypedObject() {
+		field("intField").ofType(Integer.class).in(targetObject).setValue(1);
+		assertEquals(1,
+				(int) field("intField").ofType(Integer.class).in(targetObject)
+						.getValue());
+	}
 }
