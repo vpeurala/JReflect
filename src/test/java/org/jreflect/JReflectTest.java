@@ -1,11 +1,12 @@
 package org.jreflect;
 
 import static org.jreflect.JReflect.field;
+import static org.jreflect.JReflect.method;
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-public class FieldTest {
+public class JReflectTest {
 	Object targetObject = new TestClass();
 
 	@Test
@@ -32,5 +33,11 @@ public class FieldTest {
 		assertEquals(1,
 				(int) field("intField").ofType(Integer.class).in(targetObject)
 						.getValue());
+	}
+
+	@Test
+	public void canInvokeMethodWithNoParametersAndNoReturnValue() {
+		method("methodWithNoParametersAndNoReturnValue").in(targetObject)
+				.invoke();
 	}
 }

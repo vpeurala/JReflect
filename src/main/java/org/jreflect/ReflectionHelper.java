@@ -1,6 +1,8 @@
 package org.jreflect;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 public abstract class ReflectionHelper {
 	@SuppressWarnings("unchecked")
@@ -29,6 +31,19 @@ public abstract class ReflectionHelper {
 		}
 	}
 
+	public static void invokeMethod(Object targetObject, String methodName) {
+		Method targetMethod = getAccessibleMethod(targetObject, methodName);
+		try {
+			targetMethod.invoke(targetObject);
+		} catch (IllegalArgumentException e) {
+			throw new RuntimeException(e);
+		} catch (IllegalAccessException e) {
+			throw new RuntimeException(e);
+		} catch (InvocationTargetException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
 	private static Field getAccessibleField(Object targetObject,
 			String fieldName) {
 		Class<? extends Object> targetClass = targetObject.getClass();
@@ -45,4 +60,22 @@ public abstract class ReflectionHelper {
 		}
 		return targetField;
 	}
+
+	private static Method getAccessibleMethod(Object targetObject,
+			String methodName) {
+		Class<? extends Object> targetClass = targetObject.getClass();
+		Method targetMethod;
+		try {
+			targetMethod = targetClass.getDeclaredMethod(methodName);
+		} catch (SecurityException e) {
+			throw new RuntimeException(e);
+		} catch (NoSuchMethodException e) {
+			throw new RuntimeException(e);
+		}
+		if (!targetMethod.isAccessible()) {
+			targetMethod.setAccessible(true);
+		}
+		return targetMethod;
+	}
+
 }
