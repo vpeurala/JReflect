@@ -7,6 +7,10 @@ public class RField {
         this.name = name;
     }
 
+    public RFieldWithTarget in(final Class<?> targetClass) {
+        return new RFieldWithTarget(name, targetClass);
+    }
+
     public RFieldWithTarget in(final Object targetObject) {
         return new RFieldWithTarget(name, targetObject);
     }

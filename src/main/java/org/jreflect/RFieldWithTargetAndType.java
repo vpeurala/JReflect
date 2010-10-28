@@ -1,16 +1,35 @@
 package org.jreflect;
 
+import static org.jreflect.ReflectionEngine.getFieldValue;
+import static org.jreflect.ReflectionEngine.getStaticFieldValue;
+
 public class RFieldWithTargetAndType<T> {
     private final String name;
     private final Object targetObject;
+    private final Class<?> targetClass;
 
-    public RFieldWithTargetAndType(final String name, final Object targetObject) {
-        this.name = name;
-        this.targetObject = targetObject;
+    public RFieldWithTargetAndType(final String name, final Class<?> targetClass) {
+        this(name, null, targetClass);
     }
 
+    public RFieldWithTargetAndType(final String name, final Object targetObject) {
+        this(name, targetObject, null);
+    }
+
+    private RFieldWithTargetAndType(final String name,
+            final Object targetObject, final Class<?> targetClass) {
+        this.name = name;
+        this.targetObject = targetObject;
+        this.targetClass = targetClass;
+    }
+
+    @SuppressWarnings("unchecked")
     public T getValue() {
-        return ReflectionEngine.<T> getFieldValue(targetObject, name);
+        if (targetObject != null) {
+            return (T) getFieldValue(targetObject, name);
+        } else {
+            return (T) getStaticFieldValue(targetClass, name);
+        }
     }
 
     public void setValue(final T value) {

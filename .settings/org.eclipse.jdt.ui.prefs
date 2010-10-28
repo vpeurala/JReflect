@@ -1,4 +1,4 @@
-#Thu Oct 28 21:06:20 EEST 2010
+#Thu Oct 28 21:55:28 EEST 2010
 cleanup_settings_version=2
 eclipse.preferences.version=1
 editor_save_participant_org.eclipse.jdt.ui.postsavelistener.cleanup=true
@@ -24,7 +24,7 @@ sp_cleanup.always_use_parentheses_in_expressions=true
 sp_cleanup.always_use_this_for_non_static_field_access=false
 sp_cleanup.always_use_this_for_non_static_method_access=false
 sp_cleanup.convert_to_enhanced_for_loop=true
-sp_cleanup.correct_indentation=true
+sp_cleanup.correct_indentation=false
 sp_cleanup.format_source_code=false
 sp_cleanup.format_source_code_changes_only=false
 sp_cleanup.make_local_variable_final=true
@@ -45,12 +45,12 @@ sp_cleanup.remove_private_constructors=true
 sp_cleanup.remove_trailing_whitespaces=true
 sp_cleanup.remove_trailing_whitespaces_all=true
 sp_cleanup.remove_trailing_whitespaces_ignore_empty=false
-sp_cleanup.remove_unnecessary_casts=true
+sp_cleanup.remove_unnecessary_casts=false
 sp_cleanup.remove_unnecessary_nls_tags=false
 sp_cleanup.remove_unused_imports=true
-sp_cleanup.remove_unused_local_variables=true
+sp_cleanup.remove_unused_local_variables=false
 sp_cleanup.remove_unused_private_fields=true
-sp_cleanup.remove_unused_private_members=true
+sp_cleanup.remove_unused_private_members=false
 sp_cleanup.remove_unused_private_methods=true
 sp_cleanup.remove_unused_private_types=true
 sp_cleanup.sort_members=false

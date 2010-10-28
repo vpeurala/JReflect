@@ -9,10 +9,22 @@ import java.lang.reflect.Method;
 
 public abstract class ReflectionEngine {
     @SuppressWarnings("unchecked")
+    public static <T> T getStaticFieldValue(final Class<?> targetClass,
+            final String fieldName) {
+        return (T) getStaticFieldValue(getAccessibleFieldOfClass(targetClass,
+                fieldName));
+    }
+
+    @SuppressWarnings("unchecked")
     public static <T> T getFieldValue(final Object targetObject,
             final String fieldName) {
         return (T) getFieldValue(targetObject,
-                getAccessibleField(targetObject, fieldName));
+                getAccessibleFieldOfObject(targetObject, fieldName));
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <T> T getStaticFieldValue(final Field targetField) {
+        return (T) getFieldValue(null, targetField);
     }
 
     @SuppressWarnings("unchecked")
@@ -30,7 +42,7 @@ public abstract class ReflectionEngine {
     public static void setFieldValue(final Object targetObject,
             final String fieldName, final Object value) {
         setFieldValue(targetObject,
-                getAccessibleField(targetObject, fieldName), value);
+                getAccessibleFieldOfObject(targetObject, fieldName), value);
     }
 
     public static void setFieldValue(final Object targetObject,
@@ -46,14 +58,15 @@ public abstract class ReflectionEngine {
 
     public static void invokeVoidMethod(final Class<?> targetClass,
             final String methodName, final Object... args) {
-        invokeMethod(null, getAccessibleMethod(targetClass, methodName, args),
-                args);
+        invokeMethod(null,
+                getAccessibleMethodOfClass(targetClass, methodName, args), args);
     }
 
     public static void invokeVoidMethod(final Object targetObject,
             final String methodName, final Object... args) {
         invokeMethod(targetObject,
-                getAccessibleMethod(targetObject, methodName, args), args);
+                getAccessibleMethodOfObject(targetObject, methodName, args),
+                args);
     }
 
     @SuppressWarnings("unchecked")
@@ -61,7 +74,8 @@ public abstract class ReflectionEngine {
             final Object targetObject, final String methodName,
             final Object... args) {
         return (ReturnType) invokeMethod(targetObject,
-                getAccessibleMethod(targetObject, methodName, args), args);
+                getAccessibleMethodOfObject(targetObject, methodName, args),
+                args);
     }
 
     @SuppressWarnings("unchecked")
@@ -69,7 +83,7 @@ public abstract class ReflectionEngine {
             final Class<?> targetClass, final String methodName,
             final Object... args) {
         return (ReturnType) invokeMethod(null,
-                getAccessibleMethod(targetClass, methodName, args), args);
+                getAccessibleMethodOfClass(targetClass, methodName, args), args);
     }
 
     @SuppressWarnings("unchecked")
@@ -87,12 +101,15 @@ public abstract class ReflectionEngine {
         }
     }
 
-    private static Field getAccessibleField(final Object targetObject,
+    public static Field getAccessibleFieldOfObject(final Object targetObject,
             final String fieldName) {
-        final Class<? extends Object> targetClass = targetObject.getClass();
-        Field targetField;
+        return getAccessibleFieldOfClass(targetObject.getClass(), fieldName);
+    }
+
+    public static Field getAccessibleFieldOfClass(final Class<?> targetClass,
+            final String fieldName) {
         try {
-            targetField = targetClass.getDeclaredField(fieldName);
+            final Field targetField = targetClass.getDeclaredField(fieldName);
             setAccessible(targetField);
             return targetField;
         } catch (final SecurityException e) {
@@ -102,12 +119,13 @@ public abstract class ReflectionEngine {
         }
     }
 
-    private static Method getAccessibleMethod(final Object targetObject,
+    public static Method getAccessibleMethodOfObject(final Object targetObject,
             final String methodName, final Object[] args) {
-        return getAccessibleMethod(targetObject.getClass(), methodName, args);
+        return getAccessibleMethodOfClass(targetObject.getClass(), methodName,
+                args);
     }
 
-    private static Method getAccessibleMethod(final Class<?> targetClass,
+    public static Method getAccessibleMethodOfClass(final Class<?> targetClass,
             final String methodName, final Object[] args) {
         final Arguments arguments = new Arguments(args);
         try {
@@ -127,7 +145,7 @@ public abstract class ReflectionEngine {
                 + asList(targetClass.getDeclaredMethods()));
     }
 
-    private static void setAccessible(final AccessibleObject accessibleObject) {
+    public static void setAccessible(final AccessibleObject accessibleObject) {
         if (!accessibleObject.isAccessible()) {
             accessibleObject.setAccessible(true);
         }

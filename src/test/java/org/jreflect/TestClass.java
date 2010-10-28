@@ -3,6 +3,7 @@ package org.jreflect;
 @SuppressWarnings("unused")
 public class TestClass {
     private int intField;
+    private static int staticIntField;
     private boolean methodWithNoParametersAndNoReturnValueCalled;
     private boolean methodWithNoParametersAndIntReturnValueCalled;
     private boolean methodWithParametersAndNoReturnValueCalled;
