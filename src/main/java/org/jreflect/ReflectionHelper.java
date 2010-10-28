@@ -1,5 +1,7 @@
 package org.jreflect;
 
+import static java.util.Arrays.asList;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -31,10 +33,12 @@ public abstract class ReflectionHelper {
 		}
 	}
 
-	public static void invokeMethod(Object targetObject, String methodName) {
-		Method targetMethod = getAccessibleMethod(targetObject, methodName);
+	public static void invokeVoidMethod(Object targetObject, String methodName,
+			Object... args) {
+		Method targetMethod = getAccessibleMethod(targetObject, methodName,
+				args);
 		try {
-			targetMethod.invoke(targetObject);
+			targetMethod.invoke(targetObject, args);
 		} catch (IllegalArgumentException e) {
 			throw new RuntimeException(e);
 		} catch (IllegalAccessException e) {
@@ -45,11 +49,13 @@ public abstract class ReflectionHelper {
 	}
 
 	@SuppressWarnings("unchecked")
-	public static <ReturnType> ReturnType invokeMethod(Object targetObject,
-			String methodName, Class<ReturnType> returnType) {
-		Method targetMethod = getAccessibleMethod(targetObject, methodName);
+	public static <ReturnType> ReturnType invokeValueReturningMethod(
+			Object targetObject, String methodName,
+			Class<ReturnType> returnType, Object... args) {
+		Method targetMethod = getAccessibleMethod(targetObject, methodName,
+				args);
 		try {
-			return (ReturnType) targetMethod.invoke(targetObject);
+			return (ReturnType) targetMethod.invoke(targetObject, args);
 		} catch (IllegalArgumentException e) {
 			throw new RuntimeException(e);
 		} catch (IllegalAccessException e) {
@@ -77,15 +83,27 @@ public abstract class ReflectionHelper {
 	}
 
 	private static Method getAccessibleMethod(Object targetObject,
-			String methodName) {
+			String methodName, Object[] args) {
 		Class<? extends Object> targetClass = targetObject.getClass();
-		Method targetMethod;
+		Arguments arguments = new Arguments(args);
+		Method targetMethod = null;
 		try {
-			targetMethod = targetClass.getDeclaredMethod(methodName);
+			for (Method m : targetClass.getDeclaredMethods()) {
+				if (methodName.equals(m.getName())
+						&& arguments.matchesMethod(m)) {
+					targetMethod = m;
+					break;
+				}
+			}
 		} catch (SecurityException e) {
 			throw new RuntimeException(e);
-		} catch (NoSuchMethodException e) {
-			throw new RuntimeException(e);
+		}
+		if (targetMethod == null) {
+			throw new RuntimeException("There is no method named '"
+					+ methodName + "' with arguments compatible with "
+					+ arguments + " in target class " + targetClass
+					+ ". Methods tried: "
+					+ asList(targetClass.getDeclaredMethods()));
 		}
 		if (!targetMethod.isAccessible()) {
 			targetMethod.setAccessible(true);

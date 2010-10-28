@@ -31,9 +31,9 @@ public class JReflectTest {
 	@Test
 	public void canSetFieldValueAsTypedObject() {
 		field("intField").ofType(Integer.class).in(targetObject).setValue(1);
-		assertEquals(1,
-				(int) field("intField").ofType(Integer.class).in(targetObject)
-						.getValue());
+		int valueAfterSetting = field("intField").ofType(Integer.class)
+				.in(targetObject).getValue();
+		assertEquals(1, valueAfterSetting);
 	}
 
 	@Test
@@ -49,6 +49,22 @@ public class JReflectTest {
 		int value = method(methodName).withReturnType(Integer.class)
 				.in(targetObject).invoke();
 		assertEquals(1, value);
+		assertMethodInvoked(methodName);
+	}
+
+	@Test
+	public void canInvokeMethodWithParametersAndNoReturnValue() {
+		final String methodName = "methodWithParametersAndNoReturnValue";
+		method(methodName).in(targetObject).invoke("some string", 1, true);
+		assertMethodInvoked(methodName);
+	}
+
+	@Test
+	public void canInvokeMethodWithParametersAndReturnValue() {
+		final String methodName = "methodWithParametersAndReturnValue";
+		int value = method(methodName).withReturnType(Integer.class)
+				.in(targetObject).invoke(4, 5.6f, null);
+		assertEquals(2, value);
 		assertMethodInvoked(methodName);
 	}
 

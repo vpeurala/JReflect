@@ -1,6 +1,6 @@
 package org.jreflect;
 
-import static org.jreflect.ReflectionHelper.invokeMethod;
+import static org.jreflect.ReflectionHelper.invokeVoidMethod;
 
 public class RMethodWithTarget {
 	private final String name;
@@ -11,7 +11,7 @@ public class RMethodWithTarget {
 		this.targetObject = targetObject;
 	}
 
-	public void invoke() {
-		invokeMethod(targetObject, name);
+	public void invoke(Object... args) {
+		invokeVoidMethod(targetObject, name, args);
 	}
 }

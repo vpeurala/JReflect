@@ -12,7 +12,8 @@ public class RMethodWithReturnTypeAndTarget<ReturnType> {
 		this.targetObject = targetObject;
 	}
 
-	public ReturnType invoke() {
-		return ReflectionHelper.invokeMethod(targetObject, name, returnType);
+	public ReturnType invoke(Object... args) {
+		return ReflectionHelper.invokeValueReturningMethod(targetObject, name,
+				returnType, args);
 	}
 }
