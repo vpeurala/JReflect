@@ -5,47 +5,66 @@ import static org.jreflect.JReflect.method;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import org.jreflect.RFieldWithTargetAndType;
+import org.junit.After;
 import org.junit.Ignore;
 import org.junit.Test;
 
 @Ignore
 public abstract class AbstractMethodTestCase<T> {
+    private String currentMethodName;
+
+    @After
+    public void tearDown() {
+        resetMethodInvokedFlag(currentMethodName);
+    }
+
     @Test
     public void canInvokeMethodWithNoParametersAndNoReturnValue() {
-        final String methodName = "methodWithNoParametersAndNoReturnValue";
-        method(methodName).in(target()).invoke();
-        assertMethodInvoked(methodName);
+        currentMethodName = methodPrefix() + "WithNoParametersAndNoReturnValue";
+        method(currentMethodName).in(target()).invoke();
+        assertMethodInvokedFlag(currentMethodName);
     }
 
     @Test
     public void canInvokeMethodWithNoParametersAndReturnValue() {
-        final String methodName = "methodWithNoParametersAndReturnValue";
-        final int value = method(methodName).withReturnType(Integer.class)
-                .in(target()).invoke();
+        currentMethodName = methodPrefix() + "WithNoParametersAndReturnValue";
+        final int value = method(currentMethodName)
+                .withReturnType(Integer.class).in(target()).invoke();
         assertEquals(1, value);
-        assertMethodInvoked(methodName);
+        assertMethodInvokedFlag(currentMethodName);
     }
 
     @Test
     public void canInvokeMethodWithParametersAndNoReturnValue() {
-        final String methodName = "methodWithParametersAndNoReturnValue";
-        method(methodName).in(target()).invoke("some string", 1, true);
-        assertMethodInvoked(methodName);
+        currentMethodName = methodPrefix() + "WithParametersAndNoReturnValue";
+        method(currentMethodName).in(target()).invoke("some string", 1, true);
+        assertMethodInvokedFlag(currentMethodName);
     }
 
     @Test
     public void canInvokeMethodWithParametersAndReturnValue() {
-        final String methodName = "methodWithParametersAndReturnValue";
-        final int value = method(methodName).withReturnType(Integer.class)
-                .in(target()).invoke(4, 5.6f, null);
+        currentMethodName = methodPrefix() + "WithParametersAndReturnValue";
+        final int value = method(currentMethodName)
+                .withReturnType(Integer.class).in(target())
+                .invoke(4, 5.6f, null);
         assertEquals(2, value);
-        assertMethodInvoked(methodName);
+        assertMethodInvokedFlag(currentMethodName);
     }
 
-    private void assertMethodInvoked(final String methodName) {
-        assertTrue(field(methodName + "Called").ofType(Boolean.class)
-                .in(target()).getValue());
+    private void assertMethodInvokedFlag(final String methodName) {
+        assertTrue(flagField(methodName).getValue());
+    }
+
+    private void resetMethodInvokedFlag(final String methodName) {
+        flagField(methodName).setValue(false);
+    }
+
+    private RFieldWithTargetAndType<Boolean> flagField(final String methodName) {
+        return field(methodName + "Called").ofType(Boolean.class).in(target());
     }
 
     protected abstract T target();
+
+    protected abstract String methodPrefix();
 }

@@ -1,10 +1,10 @@
-package org.jreflect.methods.instances;
+package org.jreflect.methods.inheritance;
 
 import org.jreflect.methods.AbstractMethodTestCase;
 import org.jreflect.methods.fixture.ClassWithInstanceMethods;
 import org.junit.Before;
 
-public class InstanceMethodTest extends
+public class InstanceMethodOnSuperclassTest extends
         AbstractMethodTestCase<ClassWithInstanceMethods> {
     private ClassWithInstanceMethods classWithInstanceMethods;
 
@@ -20,6 +20,6 @@ public class InstanceMethodTest extends
 
     @Override
     protected String methodPrefix() {
-        return "method";
+        return "superclassMethod";
     }
 }

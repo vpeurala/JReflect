@@ -1,7 +1,5 @@
 package org.jreflect;
 
-import static java.util.Arrays.asList;
-
 import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -138,27 +136,36 @@ public abstract class ReflectionEngine {
     public static Method getAccessibleMethodOfClass(final Class<?> targetClass,
             final String methodName, final Object[] args) {
         final Arguments arguments = new Arguments(args);
-        try {
-            for (final Method m : targetClass.getDeclaredMethods()) {
-                if (methodName.equals(m.getName())
-                        && arguments.matchesMethod(m)) {
-                    setAccessible(m);
-                    return m;
-                }
+        final List<Method> methods = allMethodsOfClassAndSuperclasses(targetClass);
+        for (final Method method : methods) {
+            if (methodName.equals(method.getName())
+                    && arguments.matchesMethod(method)) {
+                setAccessible(method);
+                return method;
             }
-        } catch (final SecurityException e) {
-            throw new RuntimeException(e);
         }
         throw new RuntimeException("There is no method named '" + methodName
                 + "' with arguments compatible with " + arguments
-                + " in target class " + targetClass + ". Methods tried: "
-                + asList(targetClass.getDeclaredMethods()));
+                + " in target class " + targetClass
+                + " or its superclass hierarchy. Methods tried: " + methods);
     }
 
     public static void setAccessible(final AccessibleObject accessibleObject) {
         if (!accessibleObject.isAccessible()) {
             accessibleObject.setAccessible(true);
         }
+    }
+
+    public static List<Method> allMethodsOfClassAndSuperclasses(
+            final Class<?> targetClass) {
+        final List<Method> methods = new ArrayList<Method>();
+        Class<?> currentClass = targetClass;
+        while (currentClass != null) {
+            methods.addAll(Arrays.<Method> asList(currentClass
+                    .getDeclaredMethods()));
+            currentClass = currentClass.getSuperclass();
+        }
+        return methods;
     }
 
     public static List<Field> allFieldsOfClassAndSuperclasses(
