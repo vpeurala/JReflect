@@ -1,11 +1,12 @@
-package org.jreflect.fields.statics;
+package org.jreflect.fields.instances;
 
 import org.jreflect.JReflect;
 import org.jreflect.fields.AbstractFieldTestCase;
+import org.jreflect.fields.statics.ClassWithStaticFields;
 import org.junit.After;
 
-public class StaticFieldTest extends
-        AbstractFieldTestCase<Class<ClassWithStaticFields>> {
+public class StaticFieldsOnInstancesTest extends
+        AbstractFieldTestCase<ClassWithStaticFields> {
     @After
     public void tearDown() {
         JReflect.field(fieldName()).in(ClassWithStaticFields.class).setValue(0);
@@ -17,7 +18,7 @@ public class StaticFieldTest extends
     }
 
     @Override
-    protected Class<ClassWithStaticFields> target() {
-        return ClassWithStaticFields.class;
+    protected ClassWithStaticFields target() {
+        return new ClassWithStaticFields();
     }
 }

@@ -7,7 +7,12 @@ TODO:
 + Exceptions
 + Inheritance
 + Constructors
-+ Statics
+
+DONE:
+-----
++ Instances without inheritance
++ Statics on classes without inheritance
++ Statics on objects without inheritance
 
 BUBBLING UNDER:
 ---------------

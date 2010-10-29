@@ -1,7 +1,6 @@
 package org.jreflect.fields.instances;
 
 import org.jreflect.fields.AbstractFieldTestCase;
-import org.jreflect.fields.instances.InstanceFieldTest.ClassWithInstanceFields;
 import org.junit.Before;
 
 public class InstanceFieldTest extends
@@ -21,10 +20,5 @@ public class InstanceFieldTest extends
     @Override
     protected ClassWithInstanceFields target() {
         return classWithInstanceFields;
-    }
-
-    @SuppressWarnings("unused")
-    public static class ClassWithInstanceFields {
-        private int intField;
     }
 }
