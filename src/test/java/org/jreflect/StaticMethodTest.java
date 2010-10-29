@@ -1,40 +1,36 @@
 package org.jreflect;
 
-import static org.jreflect.JReflect.method;
-import static org.junit.Assert.assertEquals;
-
-import org.junit.Test;
-
-public class StaticMethodTest {
-    @Test
-    public void canInvokeStaticMethodWithNoReturnValue() {
-        method("staticMethodWithParametersAndNoReturnValue").in(
-                ClassWithStaticMethods.class).invoke((byte) 1, (short) 2, '3',
-                4, 5l, 6f, 7d, true, "foo");
-    }
-
-    @Test
-    public void canInvokeStaticMethodWithReturnValue() {
-        final String value = method("staticMethodWithParametersAndReturnValue")
-                .withReturnType(String.class).in(ClassWithStaticMethods.class)
-                .invoke((byte) 1, (short) 2, '3', 4, 5l, 6f, 7d, true, "foo");
-        assertEquals("123456.07.0truefoo", value);
+public class StaticMethodTest extends AbstractMethodTestCase<Class<?>> {
+    @Override
+    protected Class<?> target() {
+        return ClassWithStaticMethods.class;
     }
 
     @SuppressWarnings("unused")
     public static class ClassWithStaticMethods {
-        private static void staticMethodWithParametersAndNoReturnValue(
-                final byte b, final short s, final char c, final int i,
-                final long l, final float f, final double d,
-                final boolean bool, final Object o) {
-            System.out.println("" + b + s + c + i + l + f + d + bool + o);
+        private static boolean methodWithNoParametersAndNoReturnValueCalled;
+        private static boolean methodWithNoParametersAndReturnValueCalled;
+        private static boolean methodWithParametersAndNoReturnValueCalled;
+        private static boolean methodWithParametersAndReturnValueCalled;
+
+        private static void methodWithNoParametersAndNoReturnValue() {
+            methodWithNoParametersAndNoReturnValueCalled = true;
         }
 
-        private static Object staticMethodWithParametersAndReturnValue(
-                final byte b, final short s, final char c, final int i,
-                final long l, final float f, final double d,
-                final boolean bool, final Object o) {
-            return "" + b + s + c + i + l + f + d + bool + o;
+        private static int methodWithNoParametersAndReturnValue() {
+            methodWithNoParametersAndReturnValueCalled = true;
+            return 1;
+        }
+
+        private static void methodWithParametersAndNoReturnValue(
+                final String s, final int i, final boolean b) {
+            methodWithParametersAndNoReturnValueCalled = true;
+        }
+
+        private static Integer methodWithParametersAndReturnValue(final long l,
+                final double d, final String a) {
+            methodWithParametersAndReturnValueCalled = true;
+            return 2;
         }
     }
 }

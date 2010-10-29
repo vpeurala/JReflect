@@ -1,51 +1,26 @@
 package org.jreflect;
 
-import static org.jreflect.JReflect.field;
-import static org.jreflect.JReflect.method;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import org.jreflect.InstanceMethodTest.ClassWithInstanceMethods;
+import org.junit.Before;
 
-import org.junit.Test;
+public class InstanceMethodTest extends
+        AbstractMethodTestCase<ClassWithInstanceMethods> {
+    private ClassWithInstanceMethods classWithInstanceMethods;
 
-public class InstanceMethodTest {
-    private final ClassWithInstanceMethods targetObject = new ClassWithInstanceMethods();
-
-    @Test
-    public void canInvokeMethodWithNoParametersAndNoReturnValue() {
-        final String methodName = "methodWithNoParametersAndNoReturnValue";
-        method(methodName).in(targetObject).invoke();
-        assertMethodInvoked(methodName);
+    @Before
+    public void setUp() {
+        classWithInstanceMethods = new ClassWithInstanceMethods();
     }
 
-    @Test
-    public void canInvokeMethodWithNoParametersAndIntReturnValue() {
-        final String methodName = "methodWithNoParametersAndIntReturnValue";
-        final int value = method(methodName).withReturnType(Integer.class)
-                .in(targetObject).invoke();
-        assertEquals(1, value);
-        assertMethodInvoked(methodName);
-    }
-
-    @Test
-    public void canInvokeMethodWithParametersAndNoReturnValue() {
-        final String methodName = "methodWithParametersAndNoReturnValue";
-        method(methodName).in(targetObject).invoke("some string", 1, true);
-        assertMethodInvoked(methodName);
-    }
-
-    @Test
-    public void canInvokeMethodWithParametersAndReturnValue() {
-        final String methodName = "methodWithParametersAndReturnValue";
-        final int value = method(methodName).withReturnType(Integer.class)
-                .in(targetObject).invoke(4, 5.6f, null);
-        assertEquals(2, value);
-        assertMethodInvoked(methodName);
+    @Override
+    protected ClassWithInstanceMethods target() {
+        return classWithInstanceMethods;
     }
 
     @SuppressWarnings("unused")
     public static class ClassWithInstanceMethods {
         private boolean methodWithNoParametersAndNoReturnValueCalled;
-        private boolean methodWithNoParametersAndIntReturnValueCalled;
+        private boolean methodWithNoParametersAndReturnValueCalled;
         private boolean methodWithParametersAndNoReturnValueCalled;
         private boolean methodWithParametersAndReturnValueCalled;
 
@@ -53,8 +28,8 @@ public class InstanceMethodTest {
             methodWithNoParametersAndNoReturnValueCalled = true;
         }
 
-        private int methodWithNoParametersAndIntReturnValue() {
-            methodWithNoParametersAndIntReturnValueCalled = true;
+        private int methodWithNoParametersAndReturnValue() {
+            methodWithNoParametersAndReturnValueCalled = true;
             return 1;
         }
 
@@ -68,10 +43,5 @@ public class InstanceMethodTest {
             methodWithParametersAndReturnValueCalled = true;
             return 2;
         }
-    }
-
-    private void assertMethodInvoked(final String methodName) {
-        assertTrue(field(methodName + "Called").ofType(Boolean.class)
-                .in(targetObject).getValue());
     }
 }

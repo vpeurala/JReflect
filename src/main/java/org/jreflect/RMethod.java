@@ -12,7 +12,11 @@ public class RMethod {
     }
 
     public RMethodWithTarget in(final Object targetObject) {
-        return new RMethodWithTarget(name, targetObject);
+        if (targetObject instanceof Class<?>) {
+            return in((Class<?>) targetObject);
+        } else {
+            return new RMethodWithTarget(name, targetObject);
+        }
     }
 
     public <ReturnType> RMethodWithReturnType<ReturnType> withReturnType(

@@ -14,7 +14,11 @@ public class RMethodWithReturnType<ReturnType> {
 
     public RMethodWithReturnTypeAndTarget<ReturnType> in(
             final Object targetObject) {
-        return new RMethodWithReturnTypeAndTarget<ReturnType>(name,
-                targetObject);
+        if (targetObject instanceof Class<?>) {
+            return in((Class<?>) targetObject);
+        } else {
+            return new RMethodWithReturnTypeAndTarget<ReturnType>(name,
+                    targetObject);
+        }
     }
 }
