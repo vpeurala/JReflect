@@ -4,7 +4,7 @@ import org.jreflect.InstanceFieldTest.ClassWithInstanceFields;
 import org.junit.Before;
 
 public class InstanceFieldTest extends
-        AbstractFieldTest<ClassWithInstanceFields> {
+        AbstractFieldTestCase<ClassWithInstanceFields> {
     private ClassWithInstanceFields classWithInstanceFields;
 
     @Before

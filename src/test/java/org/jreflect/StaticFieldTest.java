@@ -3,7 +3,7 @@ package org.jreflect;
 import org.jreflect.StaticFieldTest.ClassWithStaticFields;
 
 public class StaticFieldTest extends
-        AbstractFieldTest<Class<ClassWithStaticFields>> {
+        AbstractFieldTestCase<Class<ClassWithStaticFields>> {
     @Override
     protected String fieldName() {
         return "staticIntField";
