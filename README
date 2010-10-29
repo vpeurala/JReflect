@@ -5,14 +5,14 @@ No annotations needed.
 TODO:
 -----
 + Exceptions
-+ Inheritance
 + Constructors
 
 DONE:
 -----
-+ Instances without inheritance
-+ Statics on classes without inheritance
-+ Statics on objects without inheritance
++ Instance fields with and without inheritance
++ Static fields with and without inheritance
++ Instance methods with and without inheritance
++ Static methods with and without inheritance
 
 BUBBLING UNDER:
 ---------------
