@@ -6,6 +6,9 @@ import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public abstract class ReflectionEngine {
     @SuppressWarnings("unchecked")
@@ -114,15 +117,16 @@ public abstract class ReflectionEngine {
 
     public static Field getAccessibleFieldOfClass(final Class<?> targetClass,
             final String fieldName) {
-        try {
-            final Field targetField = targetClass.getDeclaredField(fieldName);
-            setAccessible(targetField);
-            return targetField;
-        } catch (final SecurityException e) {
-            throw new RuntimeException(e);
-        } catch (final NoSuchFieldException e) {
-            throw new RuntimeException(e);
+        final List<Field> fields = allFieldsOfClassAndSuperclasses(targetClass);
+        for (final Field field : fields) {
+            if (field.getName().equals(fieldName)) {
+                setAccessible(field);
+                return field;
+            }
         }
+        throw new RuntimeException("No field named '" + fieldName
+                + "' found on class " + targetClass
+                + " or its superclass hierarchy.");
     }
 
     public static Method getAccessibleMethodOfObject(final Object targetObject,
@@ -155,5 +159,17 @@ public abstract class ReflectionEngine {
         if (!accessibleObject.isAccessible()) {
             accessibleObject.setAccessible(true);
         }
+    }
+
+    public static List<Field> allFieldsOfClassAndSuperclasses(
+            final Class<?> targetClass) {
+        final List<Field> fields = new ArrayList<Field>();
+        Class<?> currentClass = targetClass;
+        while (currentClass != null) {
+            fields.addAll(Arrays.<Field> asList(currentClass
+                    .getDeclaredFields()));
+            currentClass = currentClass.getSuperclass();
+        }
+        return fields;
     }
 }

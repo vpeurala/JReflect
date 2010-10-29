@@ -1,10 +1,10 @@
-package org.jreflect.fields.instances;
+package org.jreflect.fields.inheritance;
 
 import org.jreflect.fields.AbstractFieldTestCase;
 import org.jreflect.fields.fixture.ClassWithInstanceFields;
 import org.junit.Before;
 
-public class InstanceFieldTest extends
+public class InstanceFieldOnSuperClassTest extends
         AbstractFieldTestCase<ClassWithInstanceFields> {
     private ClassWithInstanceFields classWithInstanceFields;
 
@@ -15,7 +15,7 @@ public class InstanceFieldTest extends
 
     @Override
     protected String fieldName() {
-        return "intField";
+        return "instanceFieldOnSuperclass";
     }
 
     @Override

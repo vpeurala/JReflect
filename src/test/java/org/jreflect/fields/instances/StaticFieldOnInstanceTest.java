@@ -2,10 +2,10 @@ package org.jreflect.fields.instances;
 
 import org.jreflect.JReflect;
 import org.jreflect.fields.AbstractFieldTestCase;
-import org.jreflect.fields.statics.ClassWithStaticFields;
+import org.jreflect.fields.fixture.ClassWithStaticFields;
 import org.junit.After;
 
-public class StaticFieldsOnInstancesTest extends
+public class StaticFieldOnInstanceTest extends
         AbstractFieldTestCase<ClassWithStaticFields> {
     @After
     public void tearDown() {

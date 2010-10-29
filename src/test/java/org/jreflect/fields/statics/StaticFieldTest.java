@@ -2,6 +2,7 @@ package org.jreflect.fields.statics;
 
 import org.jreflect.JReflect;
 import org.jreflect.fields.AbstractFieldTestCase;
+import org.jreflect.fields.fixture.ClassWithStaticFields;
 import org.junit.After;
 
 public class StaticFieldTest extends
