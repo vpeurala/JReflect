@@ -3,6 +3,7 @@ package org.jreflect;
 import static org.jreflect.ReflectionEngine.getFieldValue;
 import static org.jreflect.ReflectionEngine.getStaticFieldValue;
 import static org.jreflect.ReflectionEngine.setFieldValue;
+import static org.jreflect.ReflectionEngine.setStaticFieldValue;
 
 public class RFieldWithTarget {
     private final String name;
@@ -33,6 +34,10 @@ public class RFieldWithTarget {
     }
 
     public void setValue(final Object value) {
-        setFieldValue(targetObject, name, value);
+        if (targetObject != null) {
+            setFieldValue(targetObject, name, value);
+        } else {
+            setStaticFieldValue(targetClass, name, value);
+        }
     }
 }

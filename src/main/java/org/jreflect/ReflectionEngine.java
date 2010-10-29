@@ -45,6 +45,12 @@ public abstract class ReflectionEngine {
                 getAccessibleFieldOfObject(targetObject, fieldName), value);
     }
 
+    public static void setStaticFieldValue(final Class<?> targetClass,
+            final String fieldName, final Object value) {
+        setFieldValue(null, getAccessibleFieldOfClass(targetClass, fieldName),
+                value);
+    }
+
     public static void setFieldValue(final Object targetObject,
             final Field targetField, final Object value) {
         try {

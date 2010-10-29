@@ -12,7 +12,11 @@ public class RField {
     }
 
     public RFieldWithTarget in(final Object targetObject) {
-        return new RFieldWithTarget(name, targetObject);
+        if (targetObject instanceof Class<?>) {
+            return in((Class<?>) targetObject);
+        } else {
+            return new RFieldWithTarget(name, targetObject);
+        }
     }
 
     public <T> RFieldWithType<T> ofType(
