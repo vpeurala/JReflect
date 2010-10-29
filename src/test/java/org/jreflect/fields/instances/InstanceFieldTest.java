@@ -1,6 +1,7 @@
-package org.jreflect;
+package org.jreflect.fields.instances;
 
-import org.jreflect.InstanceFieldTest.ClassWithInstanceFields;
+import org.jreflect.fields.AbstractFieldTestCase;
+import org.jreflect.fields.instances.InstanceFieldTest.ClassWithInstanceFields;
 import org.junit.Before;
 
 public class InstanceFieldTest extends

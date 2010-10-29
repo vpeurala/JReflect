@@ -1,4 +1,4 @@
-package org.jreflect;
+package org.jreflect.fields;
 
 import static org.jreflect.JReflect.field;
 import static org.junit.Assert.assertEquals;

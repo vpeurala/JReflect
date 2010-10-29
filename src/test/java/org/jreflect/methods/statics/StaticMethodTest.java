@@ -1,4 +1,6 @@
-package org.jreflect;
+package org.jreflect.methods.statics;
+
+import org.jreflect.methods.AbstractMethodTestCase;
 
 public class StaticMethodTest extends AbstractMethodTestCase<Class<?>> {
     @Override

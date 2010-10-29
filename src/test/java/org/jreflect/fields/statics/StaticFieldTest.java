@@ -1,6 +1,7 @@
-package org.jreflect;
+package org.jreflect.fields.statics;
 
-import org.jreflect.StaticFieldTest.ClassWithStaticFields;
+import org.jreflect.fields.AbstractFieldTestCase;
+import org.jreflect.fields.statics.StaticFieldTest.ClassWithStaticFields;
 
 public class StaticFieldTest extends
         AbstractFieldTestCase<Class<ClassWithStaticFields>> {

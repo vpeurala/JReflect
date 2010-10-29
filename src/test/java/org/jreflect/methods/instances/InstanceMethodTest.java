@@ -1,6 +1,7 @@
-package org.jreflect;
+package org.jreflect.methods.instances;
 
-import org.jreflect.InstanceMethodTest.ClassWithInstanceMethods;
+import org.jreflect.methods.AbstractMethodTestCase;
+import org.jreflect.methods.instances.InstanceMethodTest.ClassWithInstanceMethods;
 import org.junit.Before;
 
 public class InstanceMethodTest extends

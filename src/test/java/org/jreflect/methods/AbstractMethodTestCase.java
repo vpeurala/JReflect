@@ -1,4 +1,4 @@
-package org.jreflect;
+package org.jreflect.methods;
 
 import static org.jreflect.JReflect.field;
 import static org.jreflect.JReflect.method;
