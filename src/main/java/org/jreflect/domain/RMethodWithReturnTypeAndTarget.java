@@ -1,6 +1,6 @@
-package org.jreflect;
+package org.jreflect.domain;
 
-import static org.jreflect.ReflectionEngine.invokeValueReturningMethod;
+import static org.jreflect.engine.Methods.invokeValueReturningMethod;
 
 public class RMethodWithReturnTypeAndTarget<ReturnType> {
     private final String name;

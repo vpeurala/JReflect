@@ -1,6 +1,6 @@
-package org.jreflect;
+package org.jreflect.domain;
 
-import static org.jreflect.ReflectionEngine.invokeVoidMethod;
+import static org.jreflect.engine.Methods.invokeVoidMethod;
 
 public class RMethodWithTarget {
     private final String name;

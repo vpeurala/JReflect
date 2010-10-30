@@ -1,4 +1,4 @@
-package org.jreflect;
+package org.jreflect.domain;
 
 public class RFieldWithType<T> {
     private final String name;

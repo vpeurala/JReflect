@@ -1,9 +1,9 @@
-package org.jreflect;
+package org.jreflect.domain;
 
-import static org.jreflect.ReflectionEngine.getFieldValue;
-import static org.jreflect.ReflectionEngine.getStaticFieldValue;
-import static org.jreflect.ReflectionEngine.setFieldValue;
-import static org.jreflect.ReflectionEngine.setStaticFieldValue;
+import static org.jreflect.engine.Fields.getFieldValue;
+import static org.jreflect.engine.Fields.getStaticFieldValue;
+import static org.jreflect.engine.Fields.setFieldValue;
+import static org.jreflect.engine.Fields.setStaticFieldValue;
 
 public class RFieldWithTarget {
     private final String name;

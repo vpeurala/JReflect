@@ -1,4 +1,4 @@
-package org.jreflect;
+package org.jreflect.domain;
 
 public class ReflectException extends RuntimeException {
     public enum Type {

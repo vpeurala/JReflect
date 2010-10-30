@@ -1,6 +1,6 @@
-package org.jreflect;
+package org.jreflect.domain;
 
-import static org.jreflect.ReflectionEngine.invokeConstructor;
+import static org.jreflect.engine.Constructors.invokeConstructor;
 
 public class RConstructor<T> {
     private final Class<T> targetClass;

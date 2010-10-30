@@ -1,4 +1,4 @@
-package org.jreflect;
+package org.jreflect.domain;
 
 public class RMethodWithReturnType<ReturnType> {
     private final String name;

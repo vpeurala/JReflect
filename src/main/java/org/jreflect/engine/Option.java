@@ -1,27 +1,27 @@
-package org.jreflect;
+package org.jreflect.engine;
 
-public abstract class Option<T> {
+abstract class Option<T> {
     private Option() {
         // Hidden.
     }
 
-    public static <T> Option<T> some(final T value) {
+    static <T> Option<T> some(final T value) {
         return new Some<T>(value);
     }
 
-    public static <T> Option<T> none() {
+    static <T> Option<T> none() {
         return new None<T>();
     }
 
-    public abstract T getValue();
+    abstract T getValue();
 
-    public abstract boolean isSome();
+    abstract boolean isSome();
 
-    public final boolean isNone() {
+    final boolean isNone() {
         return !isSome();
     }
 
-    public static class Some<T> extends Option<T> {
+    static class Some<T> extends Option<T> {
         private final T value;
 
         public Some(final T value) {
@@ -39,11 +39,11 @@ public abstract class Option<T> {
         }
     }
 
-    public static class None<T> extends Option<T> {
+    static class None<T> extends Option<T> {
         @Override
         public T getValue() {
             throw new UnsupportedOperationException(
-            "Option.None has no value, so you cannot invoke getValue() on it!");
+                    "Option.None has no value, so you cannot invoke getValue() on it!");
         }
 
         @Override
