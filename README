@@ -4,9 +4,10 @@ No annotations needed.
 
 TODO:
 -----
-+ Exceptions
-+ Constructors
++ Exceptions thrown by invoked methods & constructors
++ Exceptions from incorrect usage
 + Strings as args like objects and classes, to enable invocation without compile-time dependency
++ Invoking varargs methods & constructors
 
 DONE:
 -----
@@ -14,8 +15,10 @@ DONE:
 + Static fields with and without inheritance
 + Instance methods with and without inheritance
 + Static methods with and without inheritance
++ Constructors
 
 BUBBLING UNDER:
 ---------------
 + Annotations?
 + Generics?
++ Mass lookups & invocations of fields, methods and constructors? (foreach-style?)
