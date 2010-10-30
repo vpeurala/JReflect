@@ -4,18 +4,18 @@ No annotations needed.
 
 TODO:
 -----
-+ Exceptions thrown by invoked methods & constructors
 + Exceptions from incorrect usage
 + Strings as args like objects and classes, to enable invocation without compile-time dependency
 + Invoking varargs methods & constructors
 
 DONE:
 -----
-+ Instance fields with and without inheritance
-+ Static fields with and without inheritance
-+ Instance methods with and without inheritance
-+ Static methods with and without inheritance
-+ Constructors
++ Getting and setting instance fields with and without inheritance
++ Getting and setting static fields with and without inheritance
++ Invoking instance methods with and without inheritance
++ Invoking static methods with and without inheritance
++ Invoking constructors
++ Passing and wrapping exceptions thrown by invoked methods & constructors
 
 BUBBLING UNDER:
 ---------------
