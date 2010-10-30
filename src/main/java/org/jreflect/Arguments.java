@@ -75,8 +75,8 @@ class Arguments {
             final Class<?> methodParameterType = parameterTypes.get(i);
             final Option<Class<?>> argumentClass = argumentClasses.get(i);
             if (argumentClass.isSome()
-                    && !isExactOrCoercablePrimitiveVersionOf(
-                            methodParameterType, argumentClass.getValue())
+                    && !(methodParameterType.isPrimitive() && isExactOrCoercablePrimitiveVersionOf(
+                            methodParameterType, argumentClass.getValue()))
                     && !methodParameterType.isAssignableFrom(argumentClass
                             .getValue())) {
                 return false;
@@ -88,11 +88,12 @@ class Arguments {
     private boolean isExactOrCoercablePrimitiveVersionOf(
             final Class<?> possiblePrimitiveType,
             final Class<?> possibleWrapperType) {
-        if (!possiblePrimitiveType.isPrimitive()) {
-            return false;
-        }
         final List<Class<?>> coercions = coercionRules.get(possibleWrapperType);
-        return coercions.contains(possiblePrimitiveType);
+        if (coercions == null) {
+            return false;
+        } else {
+            return coercions.contains(possiblePrimitiveType);
+        }
     }
 
     @Override

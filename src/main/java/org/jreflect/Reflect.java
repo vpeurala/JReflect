@@ -1,7 +1,7 @@
 package org.jreflect;
 
 
-public abstract class JReflect {
+public abstract class Reflect {
     public static RField field(final String name) {
         return new RField(name);
     }

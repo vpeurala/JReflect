@@ -1,6 +1,6 @@
 package org.jreflect.constructors;
 
-import static org.jreflect.JReflect.constructorOf;
+import static org.jreflect.Reflect.constructorOf;
 import static org.junit.Assert.assertNotNull;
 
 import org.jreflect.constructors.fixture.ClassWithManyConstructors;

@@ -1,6 +1,6 @@
 package org.jreflect.fields;
 
-import static org.jreflect.JReflect.field;
+import static org.jreflect.Reflect.field;
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Ignore;

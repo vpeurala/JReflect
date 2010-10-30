@@ -1,7 +1,7 @@
 package org.jreflect.methods;
 
-import static org.jreflect.JReflect.field;
-import static org.jreflect.JReflect.method;
+import static org.jreflect.Reflect.field;
+import static org.jreflect.Reflect.method;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 

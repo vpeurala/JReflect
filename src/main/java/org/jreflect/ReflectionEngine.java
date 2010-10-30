@@ -105,7 +105,14 @@ public abstract class ReflectionEngine {
         } catch (final IllegalAccessException e) {
             throw new RuntimeException(e);
         } catch (final InvocationTargetException e) {
-            throw new RuntimeException(e);
+            final Throwable cause = e.getCause();
+            if (cause instanceof RuntimeException) {
+                throw (RuntimeException) cause;
+            } else if (cause instanceof Error) {
+                throw (Error) cause;
+            } else {
+                throw new ReflectException(e.getCause());
+            }
         }
     }
 
@@ -126,7 +133,14 @@ public abstract class ReflectionEngine {
         } catch (final IllegalAccessException e) {
             throw new RuntimeException(e);
         } catch (final InvocationTargetException e) {
-            throw new RuntimeException(e);
+            final Throwable cause = e.getCause();
+            if (cause instanceof RuntimeException) {
+                throw (RuntimeException) cause;
+            } else if (cause instanceof Error) {
+                throw (Error) cause;
+            } else {
+                throw new ReflectException(e.getCause());
+            }
         }
     }
 
