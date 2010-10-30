@@ -1,5 +1,6 @@
 package org.jreflect;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -10,12 +11,12 @@ import java.util.Map;
 class Arguments {
     /**
      * http://java.sun.com/docs/books/jls/third_edition/html/conversions.html
-     * 
+     *
      * 5.1.2 Widening Primitive Conversion
-     * 
+     *
      * The following 19 specific conversions on primitive types are called the
      * widening primitive conversions:
-     * 
+     *
      * # byte to short, int, long, float, or double
      * # short to int, long, float, or double
      * # char to int, long, float, or double
@@ -54,20 +55,30 @@ class Arguments {
         }
     }
 
-    boolean matchesMethod(final Method m) {
-        final List<Class<?>> methodParameterTypes = Arrays.asList(m
-                .getParameterTypes());
-        if (methodParameterTypes.size() != arguments.size()) {
+    boolean matchesMethod(final Method candidateMethod) {
+        final List<Class<?>> methodParameterTypes = Arrays
+                .asList(candidateMethod.getParameterTypes());
+        return matchesParameters(methodParameterTypes);
+    }
+
+    boolean matchesConstructor(final Constructor<?> candidateConstructor) {
+        final List<Class<?>> constructorParameterTypes = Arrays
+                .asList(candidateConstructor.getParameterTypes());
+        return matchesParameters(constructorParameterTypes);
+    }
+
+    boolean matchesParameters(final List<Class<?>> parameterTypes) {
+        if (parameterTypes.size() != arguments.size()) {
             return false;
         }
-        for (int i = 0; i < methodParameterTypes.size(); i++) {
-            final Class<?> methodParameterType = methodParameterTypes.get(i);
+        for (int i = 0; i < parameterTypes.size(); i++) {
+            final Class<?> methodParameterType = parameterTypes.get(i);
             final Option<Class<?>> argumentClass = argumentClasses.get(i);
             if (argumentClass.isSome()
                     && !isExactOrCoercablePrimitiveVersionOf(
                             methodParameterType, argumentClass.getValue())
-                            && !methodParameterType.isAssignableFrom(argumentClass
-                                    .getValue())) {
+                    && !methodParameterType.isAssignableFrom(argumentClass
+                            .getValue())) {
                 return false;
             }
         }

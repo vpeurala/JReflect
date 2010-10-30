@@ -1,6 +1,7 @@
 package org.jreflect;
 
 import java.lang.reflect.AccessibleObject;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -108,6 +109,27 @@ public abstract class ReflectionEngine {
         }
     }
 
+    public static <T> T invokeConstructor(final Class<T> targetClass,
+            final Object... args) {
+        return invokeConstructor(
+                getAccessibleConstructorOfClass(targetClass, args), args);
+    }
+
+    public static <T> T invokeConstructor(
+            final Constructor<T> targetConstructor, final Object... args) {
+        try {
+            return targetConstructor.newInstance(args);
+        } catch (final IllegalArgumentException e) {
+            throw new RuntimeException(e);
+        } catch (final InstantiationException e) {
+            throw new RuntimeException(e);
+        } catch (final IllegalAccessException e) {
+            throw new RuntimeException(e);
+        } catch (final InvocationTargetException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public static Field getAccessibleFieldOfObject(final Object targetObject,
             final String fieldName) {
         return getAccessibleFieldOfClass(targetObject.getClass(), fieldName);
@@ -150,6 +172,22 @@ public abstract class ReflectionEngine {
                 + " or its superclass hierarchy. Methods tried: " + methods);
     }
 
+    public static <T> Constructor<T> getAccessibleConstructorOfClass(
+            final Class<T> targetClass, final Object[] args) {
+        final Arguments arguments = new Arguments(args);
+        final List<Constructor<T>> constructors = allConstructorsOfClass(targetClass);
+        for (final Constructor<T> constructor : constructors) {
+            if (arguments.matchesConstructor(constructor)) {
+                setAccessible(constructor);
+                return constructor;
+            }
+        }
+        throw new RuntimeException(
+                "There is no constructor with arguments compatible with "
+                        + arguments + " in target class " + targetClass
+                        + ". Constructors tried: " + constructors);
+    }
+
     public static void setAccessible(final AccessibleObject accessibleObject) {
         if (!accessibleObject.isAccessible()) {
             accessibleObject.setAccessible(true);
@@ -178,5 +216,18 @@ public abstract class ReflectionEngine {
             currentClass = currentClass.getSuperclass();
         }
         return fields;
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <T> List<Constructor<T>> allConstructorsOfClass(
+            final Class<T> targetClass) {
+        final List<Constructor<T>> constructors = new ArrayList<Constructor<T>>();
+        constructors.addAll(Arrays
+                .<Constructor<T>> asList((Constructor<T>[]) targetClass
+                        .getConstructors()));
+        constructors.addAll(Arrays
+                .<Constructor<T>> asList((Constructor<T>[]) targetClass
+                        .getDeclaredConstructors()));
+        return constructors;
     }
 }
