@@ -13,4 +13,12 @@ public class ConstructorTest {
                 ClassWithManyConstructors.class).invoke();
         assertNotNull(instance);
     }
+
+    @Test
+    public void canInvokeConstructorWithArgs() {
+        final ClassWithManyConstructors instance = constructorOf(
+                ClassWithManyConstructors.class).invoke((byte) 1, (short) 2,
+                (char) 3, 4, 5, 6, 7, true, "foo");
+        assertNotNull(instance);
+    }
 }
