@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.jreflect.ReflectException.Type;
+
 public abstract class ReflectionEngine {
     @SuppressWarnings("unchecked")
     public static <T> T getStaticFieldValue(final Class<?> targetClass,
@@ -165,12 +167,34 @@ public abstract class ReflectionEngine {
 
     public static Method getAccessibleMethodOfObject(final Object targetObject,
             final String methodName, final Object[] args) {
-        return getAccessibleMethodOfClass(targetObject.getClass(), methodName,
-                args);
+        final Method foundMethod = findMatchingMethodAndSetAccessible(
+                targetObject.getClass(), methodName, args);
+        if (foundMethod == null) {
+            throw new ReflectException(
+                    Type.METHOD_NOT_FOUND_BY_NAME_FROM_OBJECT_INSTANCE,
+                    targetObject);
+        } else {
+            return foundMethod;
+        }
     }
 
     public static Method getAccessibleMethodOfClass(final Class<?> targetClass,
             final String methodName, final Object[] args) {
+        final Method foundMethod = findMatchingMethodAndSetAccessible(
+                targetClass, methodName, args);
+        if (foundMethod == null) {
+            // FIXME VP Correct parameters
+            throw new ReflectException(
+                    Type.METHOD_NOT_FOUND_BY_NAME_FROM_OBJECT_INSTANCE,
+                    targetClass);
+        } else {
+            return foundMethod;
+        }
+    }
+
+    private static Method findMatchingMethodAndSetAccessible(
+            final Class<?> targetClass, final String methodName,
+            final Object[] args) {
         final Arguments arguments = new Arguments(args);
         final List<Method> methods = allMethodsOfClassAndSuperclasses(targetClass);
         for (final Method method : methods) {
@@ -180,10 +204,7 @@ public abstract class ReflectionEngine {
                 return method;
             }
         }
-        throw new RuntimeException("There is no method named '" + methodName
-                + "' with arguments compatible with " + arguments
-                + " in target class " + targetClass
-                + " or its superclass hierarchy. Methods tried: " + methods);
+        return null;
     }
 
     public static <T> Constructor<T> getAccessibleConstructorOfClass(
