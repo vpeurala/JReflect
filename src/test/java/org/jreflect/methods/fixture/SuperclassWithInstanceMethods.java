@@ -1,7 +1,7 @@
 package org.jreflect.methods.fixture;
 
 @SuppressWarnings("unused")
-public class SuperclassWithInstanceMethods {
+public class SuperclassWithInstanceMethods extends Hyperclass {
     private boolean superclassMethodWithNoParametersAndNoReturnValueCalled;
     private boolean superclassMethodWithNoParametersAndReturnValueCalled;
     private boolean superclassMethodWithParametersAndNoReturnValueCalled;

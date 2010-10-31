@@ -1,11 +1,11 @@
 package org.jreflect.exceptions;
 
 import static org.jreflect.Reflect.method;
-import static org.jreflect.engine.StringUtil.lines;
+import static org.jreflect.util.StringUtil.lines;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
-import org.jreflect.domain.ReflectException;
+import org.jreflect.exception.ReflectException;
 import org.jreflect.methods.fixture.ClassWithInstanceMethods;
 import org.junit.Test;
 
@@ -30,7 +30,6 @@ public class IncorrectUsageExceptionTest {
                     "",
                     "EXISTING METHODS IN THE TARGET CLASS HIERARCHY:",
                     "-----------------------------------------------",
-                    "",
                     "Methods declared in the class of the target object",
                     "(org.jreflect.methods.fixture.ClassWithInstanceMethods)",
                     "   + private void methodWithNoParametersAndNoReturnValue()",
@@ -38,15 +37,18 @@ public class IncorrectUsageExceptionTest {
                     "   + private void methodWithParametersAndNoReturnValue(String, int, boolean)",
                     "   + private Integer methodWithParametersAndReturnValue(long, double, String)",
                     "",
-                    "Methods declared in the superclass of 'ClassWithInstanceMethods'"
-                            + "(org.jreflect.methods.fixture.SuperclassWithInstanceMethods)",
+                    "Methods declared in the superclass of 'ClassWithInstanceMethods'",
+                    "(org.jreflect.methods.fixture.SuperclassWithInstanceMethods)",
                     "   + private void superclassMethodWithNoParametersAndNoReturnValue()",
                     "   + private int superclassMethodWithNoParametersAndReturnValue()",
                     "   + private void superclassMethodWithParametersAndNoReturnValue(String, int, boolean)",
                     "   + private Integer superclassMethodWithParametersAndReturnValue(long, double, String)",
                     "",
-                    "Superclass of 'SuperclassWithInstanceMethods' is java.lang.Object.",
-                    "", "TARGET OBJECT:", "--------------", "",
+                    "Methods declared in the superclass of 'SuperclassWithInstanceMethods'",
+                    "(org.jreflect.methods.fixture.Hyperclass)",
+                    "   + protected boolean isHyper()", "",
+                    "Superclass of 'Hyperclass' is java.lang.Object.", "",
+                    "TARGET OBJECT:", "--------------",
                     targetObject.toString(), "\n");
             assertEquals(expectedErrorMessage, e.getMessage());
         }
@@ -77,7 +79,6 @@ public class IncorrectUsageExceptionTest {
                     "",
                     "EXISTING METHODS IN THE TARGET CLASS HIERARCHY:",
                     "-----------------------------------------------",
-                    "",
                     "Methods declared in the class of the target object",
                     "(org.jreflect.methods.fixture.ClassWithInstanceMethods)",
                     "   + private void methodWithNoParametersAndNoReturnValue()",
@@ -85,15 +86,18 @@ public class IncorrectUsageExceptionTest {
                     "   + private void methodWithParametersAndNoReturnValue(String, int, boolean)",
                     "   + private Integer methodWithParametersAndReturnValue(long, double, String)",
                     "",
-                    "Methods declared in the superclass of 'ClassWithInstanceMethods'"
-                            + "(org.jreflect.methods.fixture.SuperclassWithInstanceMethods)",
+                    "Methods declared in the superclass of 'ClassWithInstanceMethods'",
+                    "(org.jreflect.methods.fixture.SuperclassWithInstanceMethods)",
                     "   + private void superclassMethodWithNoParametersAndNoReturnValue()",
                     "   + private int superclassMethodWithNoParametersAndReturnValue()",
                     "   + private void superclassMethodWithParametersAndNoReturnValue(String, int, boolean)",
                     "   + private Integer superclassMethodWithParametersAndReturnValue(long, double, String)",
                     "",
-                    "Superclass of 'SuperclassWithInstanceMethods' is java.lang.Object.",
-                    "", "TARGET OBJECT:", "--------------", "",
+                    "Methods declared in the superclass of 'SuperclassWithInstanceMethods'",
+                    "(org.jreflect.methods.fixture.Hyperclass)",
+                    "   + protected boolean isHyper()", "",
+                    "Superclass of 'Hyperclass' is java.lang.Object.", "",
+                    "TARGET OBJECT:", "--------------",
                     targetObject.toString(), "\n");
             assertEquals(expectedErrorMessage, e.getMessage());
         }

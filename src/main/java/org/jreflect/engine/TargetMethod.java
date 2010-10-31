@@ -4,9 +4,9 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
 
-import org.jreflect.domain.ReflectException;
-import org.jreflect.domain.ReflectException.FailureType;
-import org.jreflect.domain.ReflectException.TargetType;
+import org.jreflect.exception.FailureType;
+import org.jreflect.exception.ReflectException;
+import org.jreflect.exception.TargetType;
 
 public class TargetMethod<ReturnType> {
     private final TargetMember target;

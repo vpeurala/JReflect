@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.jreflect.domain.ReflectException;
+import org.jreflect.exception.ReflectException;
 
 public class Constructors {
     @SuppressWarnings("unchecked")

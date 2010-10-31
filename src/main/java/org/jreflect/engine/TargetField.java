@@ -3,9 +3,9 @@ package org.jreflect.engine;
 import java.lang.reflect.Field;
 import java.util.List;
 
-import org.jreflect.domain.ReflectException;
-import org.jreflect.domain.ReflectException.FailureType;
-import org.jreflect.domain.ReflectException.TargetType;
+import org.jreflect.exception.FailureType;
+import org.jreflect.exception.ReflectException;
+import org.jreflect.exception.TargetType;
 
 public class TargetField<Type> {
     private final TargetMember target;

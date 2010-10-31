@@ -1,6 +1,6 @@
 package org.jreflect.engine;
 
-import org.jreflect.domain.ReflectException.InvocationType;
+import org.jreflect.exception.InvocationType;
 
 public class TargetMember implements VisitableWithTargetMemberVisitor {
     private final String memberName;

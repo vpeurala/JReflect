@@ -7,7 +7,7 @@ import static org.junit.Assert.fail;
 
 import java.io.IOException;
 
-import org.jreflect.domain.ReflectException;
+import org.jreflect.exception.ReflectException;
 import org.jreflect.exceptions.fixture.ClassWhichThrowsExceptions;
 import org.junit.Test;
 
