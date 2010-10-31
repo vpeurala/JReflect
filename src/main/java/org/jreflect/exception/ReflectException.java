@@ -73,6 +73,7 @@ public class ReflectException extends RuntimeException {
                                         + " with name",
                                 "  '" + target.memberName() + "'",
                                 "but its parameters",
+                                // FIXME VP Hardcoded shite
                                 "  (long, double, String)",
                                 "do not match given parameters",
                                 "  (String \"foo\")");
@@ -115,48 +116,46 @@ public class ReflectException extends RuntimeException {
                         new Transformer<Method, String>() {
                             @Override
                             public String transform(final Method inputMethod) {
-                                return "   + "
-                                        + formatModifiers(inputMethod
-                                                .getModifiers())
-                                        + " "
-                                        + inputMethod.getReturnType()
-                                                .getSimpleName()
-                                        + " "
-                                        + inputMethod.getName()
-                                        + "("
-                                        + formatParameterTypes(inputMethod
-                                                .getParameterTypes()) + ")";
-                            }
-
-                            private String formatModifiers(final int modifiers) {
-                                final List<String> keywords = new ArrayList<String>();
-                                if (isPublic(modifiers)) {
-                                    keywords.add("public");
-                                } else if (isProtected(modifiers)) {
-                                    keywords.add("protected");
-                                } else if (isPrivate(modifiers)) {
-                                    keywords.add("private");
-                                }
-                                if (Modifier.isStatic(modifiers)) {
-                                    keywords.add("static");
-                                }
-                                return join(keywords, " ");
-                            }
-
-                            private String formatParameterTypes(
-                                    final Class<?>[] parameterTypes) {
-                                return join(
-                                        map(Arrays
-                                                .<Class<?>> asList(parameterTypes),
-                                                new Transformer<Class<?>, String>() {
-                                                    @Override
-                                                    public String transform(
-                                                            final Class<?> inputType) {
-                                                        return inputType
-                                                                .getSimpleName();
-                                                    }
-                                                }), ", ");
+                                return formatMethod(inputMethod);
                             }
                         }), "\n");
+    }
+
+    private static String formatMethod(final Method inputMethod) {
+        return "   + " + formatModifiers(inputMethod.getModifiers()) + " "
+                + inputMethod.getReturnType().getSimpleName() + " "
+                + inputMethod.getName() + "("
+                + formatParameterTypes(inputMethod.getParameterTypes()) + ")";
+    }
+
+    private static String formatModifiers(final int modifiers) {
+        final List<String> keywords = new ArrayList<String>();
+        if (isPublic(modifiers)) {
+            keywords.add("public");
+        } else if (isProtected(modifiers)) {
+            keywords.add("protected");
+        } else if (isPrivate(modifiers)) {
+            keywords.add("private");
+        }
+        if (Modifier.isAbstract(modifiers)) {
+            keywords.add("abstract");
+        } else if (Modifier.isFinal(modifiers)) {
+            keywords.add("final");
+        }
+        if (Modifier.isStatic(modifiers)) {
+            keywords.add("static");
+        }
+        return join(keywords, " ");
+    }
+
+    private static String formatParameterTypes(final Class<?>[] parameterTypes) {
+        return join(
+                map(Arrays.<Class<?>> asList(parameterTypes),
+                        new Transformer<Class<?>, String>() {
+                            @Override
+                            public String transform(final Class<?> inputType) {
+                                return inputType.getSimpleName();
+                            }
+                        }), ", ");
     }
 }
