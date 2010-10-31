@@ -1,37 +1,31 @@
 package org.jreflect.domain;
 
-import static org.jreflect.engine.Methods.invokeValueReturningMethod;
+import static org.jreflect.engine.Target.forClass;
+import static org.jreflect.engine.Target.forObject;
+
+import org.jreflect.engine.Target;
 
 public class RMethodWithReturnTypeAndTarget<ReturnType> {
-    private final String name;
-    private final Object targetObject;
-    private final Class<?> targetClass;
+    private final String methodName;
+    private final Target target;
+    private final Class<ReturnType> returnType;
 
-    public RMethodWithReturnTypeAndTarget(final String name,
-            final Class<?> targetClass) {
-        this(name, null, targetClass);
+    public RMethodWithReturnTypeAndTarget(final String methodName,
+            final Class<?> targetClass, final Class<ReturnType> returnType) {
+        this.methodName = methodName;
+        this.target = forClass(targetClass);
+        this.returnType = returnType;
     }
 
-    public RMethodWithReturnTypeAndTarget(final String name,
-            final Object targetObject) {
-        this(name, targetObject, null);
+    public RMethodWithReturnTypeAndTarget(final String methodName,
+            final Object targetObject, final Class<ReturnType> returnType) {
+        this.methodName = methodName;
+        this.target = forObject(targetObject);
+        this.returnType = returnType;
     }
 
-    private RMethodWithReturnTypeAndTarget(final String name,
-            final Object targetObject, final Class<?> targetClass) {
-        this.name = name;
-        this.targetObject = targetObject;
-        this.targetClass = targetClass;
-    }
-
-    @SuppressWarnings("unchecked")
     public ReturnType invoke(final Object... args) {
-        if (targetObject != null) {
-            return (ReturnType) invokeValueReturningMethod(targetObject, name,
-                    args);
-        } else {
-            return (ReturnType) invokeValueReturningMethod(targetClass, name,
-                    args);
-        }
+        return returnType.cast(target.forMethod(methodName, returnType, args)
+                .invoke());
     }
 }

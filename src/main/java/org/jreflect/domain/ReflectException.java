@@ -1,24 +1,146 @@
 package org.jreflect.domain;
 
 public class ReflectException extends RuntimeException {
-    public enum Type {
-        METHOD_NOT_FOUND_BY_NAME_FROM_OBJECT_INSTANCE
+    public enum TargetType {
+        FIELD {
+            @Override
+            public String accept(final Visitor v) {
+                return v.visitField();
+            }
+        },
+        METHOD {
+            @Override
+            public String accept(final Visitor v) {
+                return v.visitMethod();
+            }
+        },
+        CONSTRUCTOR {
+            @Override
+            public String accept(final Visitor v) {
+                return v.visitConstructor();
+            }
+        };
+        public abstract String accept(Visitor v);
+
+        public interface Visitor {
+            String visitField();
+
+            String visitMethod();
+
+            String visitConstructor();
+        }
     }
 
-    public ReflectException(final Type type, final Object targetObject) {
-        super(buildMessage(type, targetObject));
+    public enum InvocationType {
+        STATIC {
+            @Override
+            public String accept(final Visitor v) {
+                return v.visitStatic();
+            }
+        },
+        INSTANCE {
+            @Override
+            public String accept(final Visitor v) {
+                return v.visitInstance();
+            }
+        };
+        public abstract String accept(Visitor v);
+
+        public interface Visitor {
+            String visitStatic();
+
+            String visitInstance();
+        }
+    }
+
+    public enum FailureType {
+        NOT_FOUND_BY_NAME {
+            @Override
+            public String accept(final Visitor v) {
+                return v.visitNotFoundByName();
+            }
+        },
+        NOT_FOUND_BY_MATCHING_PARAMETERS {
+            @Override
+            public String accept(final Visitor v) {
+                return v.visitNotFoundByMatchingParameters();
+            }
+        },
+        NOT_FOUND_BY_MATCHING_RETURN_TYPE {
+            @Override
+            public String accept(final Visitor v) {
+                return v.visitNotFoundByMatchingReturnType();
+            }
+        };
+        public abstract String accept(Visitor v);
+
+        public interface Visitor {
+            String visitNotFoundByName();
+
+            String visitNotFoundByMatchingParameters();
+
+            String visitNotFoundByMatchingReturnType();
+        }
+    }
+
+    public ReflectException(final TargetType targetType,
+            final InvocationType invocationType, final FailureType failureType,
+            final Object targetObject) {
+        super(buildMessage(targetType, invocationType, failureType,
+                targetObject));
     }
 
     public ReflectException(final Throwable cause) {
         super(cause);
     }
 
-    private static String buildMessage(
-            @SuppressWarnings("unused") final Type type,
+    private static String buildMessage(final TargetType targetType,
+            final InvocationType invocationType, final FailureType failureType,
             final Object targetObject) {
         return lines(
                 "",
-                "*** METHOD NOT FOUND BY NAME FROM OBJECT INSTANCE *** ",
+                "*** " + targetType.accept(new TargetType.Visitor() {
+                    @Override
+                    public String visitMethod() {
+                        return "METHOD";
+                    }
+
+                    @Override
+                    public String visitField() {
+                        return "FIELD";
+                    }
+
+                    @Override
+                    public String visitConstructor() {
+                        return "CONSTRUCTOR";
+                    }
+                }) + " " + failureType.accept(new FailureType.Visitor() {
+                    @Override
+                    public String visitNotFoundByName() {
+                        return "NOT FOUND BY NAME";
+                    }
+
+                    @Override
+                    public String visitNotFoundByMatchingParameters() {
+                        return "NOT FOUND BY INPUT PARAMETERS";
+                    }
+
+                    @Override
+                    public String visitNotFoundByMatchingReturnType() {
+                        return "NOT FOUND BY RETURN TYPE";
+                    }
+                }) + " " + "FROM "
+                        + invocationType.accept(new InvocationType.Visitor() {
+                            @Override
+                            public String visitStatic() {
+                                return "CLASS";
+                            }
+
+                            @Override
+                            public String visitInstance() {
+                                return "OBJECT INSTANCE";
+                            }
+                        }) + " *** ",
                 "",
                 "REASON FOR THIS EXCEPTION:",
                 "--------------------------",

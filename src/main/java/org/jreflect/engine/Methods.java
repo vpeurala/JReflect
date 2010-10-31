@@ -7,10 +7,11 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.jreflect.domain.ReflectException;
-import org.jreflect.domain.ReflectException.Type;
+import org.jreflect.domain.ReflectException.FailureType;
+import org.jreflect.domain.ReflectException.InvocationType;
+import org.jreflect.domain.ReflectException.TargetType;
 
 public class Methods {
-
     public static void invokeVoidMethod(final Class<?> targetClass,
             final String methodName, final Object... args) {
         invokeMethod(null,
@@ -68,9 +69,10 @@ public class Methods {
         final Method foundMethod = findMatchingMethodAndSetAccessible(
                 targetObject.getClass(), methodName, args);
         if (foundMethod == null) {
-            throw new ReflectException(
-                    Type.METHOD_NOT_FOUND_BY_NAME_FROM_OBJECT_INSTANCE,
-                    targetObject);
+            throw new ReflectException(TargetType.METHOD,
+                    InvocationType.INSTANCE,
+                    // FIXME VP This is wrong
+                    FailureType.NOT_FOUND_BY_NAME, targetObject);
         } else {
             return foundMethod;
         }
@@ -81,10 +83,10 @@ public class Methods {
         final Method method = findMatchingMethodAndSetAccessible(targetClass,
                 methodName, args);
         if (method == null) {
-            // FIXME VP Correct parameters
-            throw new ReflectException(
-                    Type.METHOD_NOT_FOUND_BY_NAME_FROM_OBJECT_INSTANCE,
-                    targetClass);
+            throw new ReflectException(TargetType.METHOD,
+                    InvocationType.STATIC,
+                    // FIXME VP This is wrong
+                    FailureType.NOT_FOUND_BY_NAME, targetClass);
         } else {
             return method;
         }
@@ -115,4 +117,5 @@ public class Methods {
             currentClass = currentClass.getSuperclass();
         }
         return methods;
-    }}
+    }
+}
