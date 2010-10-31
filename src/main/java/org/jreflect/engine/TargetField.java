@@ -8,12 +8,12 @@ import org.jreflect.domain.ReflectException.FailureType;
 import org.jreflect.domain.ReflectException.TargetType;
 
 public class TargetField<Type> {
-    private final Target target;
+    private final TargetMember target;
     private final String fieldName;
     private final Class<Type> type;
     private final Field targetField;
 
-    TargetField(final Target target, final String fieldName,
+    TargetField(final TargetMember target, final String fieldName,
             final Class<Type> type) {
         this.target = target;
         this.fieldName = fieldName;

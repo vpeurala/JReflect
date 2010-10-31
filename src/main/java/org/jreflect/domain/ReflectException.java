@@ -1,5 +1,9 @@
 package org.jreflect.domain;
 
+import static org.jreflect.engine.StringUtil.lines;
+
+import org.jreflect.engine.TargetMember;
+
 public class ReflectException extends RuntimeException {
     public enum TargetType {
         FIELD {
@@ -85,9 +89,8 @@ public class ReflectException extends RuntimeException {
 
     public ReflectException(final TargetType targetType,
             final InvocationType invocationType, final FailureType failureType,
-            final Object targetObject) {
-        super(buildMessage(targetType, invocationType, failureType,
-                targetObject));
+            final TargetMember target) {
+        super(buildMessage(targetType, invocationType, failureType, target));
     }
 
     public ReflectException(final Throwable cause) {
@@ -96,7 +99,7 @@ public class ReflectException extends RuntimeException {
 
     private static String buildMessage(final TargetType targetType,
             final InvocationType invocationType, final FailureType failureType,
-            final Object targetObject) {
+            final TargetMember target) {
         return lines(
                 "",
                 "*** " + targetType.accept(new TargetType.Visitor() {
@@ -122,7 +125,7 @@ public class ReflectException extends RuntimeException {
 
                     @Override
                     public String visitNotFoundByMatchingParameters() {
-                        return "NOT FOUND BY INPUT PARAMETERS";
+                        return "NOT FOUND BY PARAMETERS";
                     }
 
                     @Override
@@ -144,8 +147,66 @@ public class ReflectException extends RuntimeException {
                 "",
                 "REASON FOR THIS EXCEPTION:",
                 "--------------------------",
-                "There is no method named",
-                "  'methodWhichDoesNotExist'",
+                failureType.accept(new FailureType.Visitor() {
+                    @Override
+                    public String visitNotFoundByName() {
+                        return lines(
+                                "There is no "
+                                        + targetType
+                                                .accept(new TargetType.Visitor() {
+                                                    @Override
+                                                    public String visitMethod() {
+                                                        return "method";
+                                                    }
+
+                                                    @Override
+                                                    public String visitField() {
+                                                        return "field";
+                                                    }
+
+                                                    @Override
+                                                    public String visitConstructor() {
+                                                        return "constructor";
+                                                    }
+                                                }) + " named",
+                                "  '" + target.memberName() + "'");
+                    }
+
+                    @Override
+                    public String visitNotFoundByMatchingReturnType() {
+                        // FIXME Auto-generated method stub
+                        throw new UnsupportedOperationException(
+                                "visitNotFoundByMatchingReturnType");
+                    }
+
+                    @Override
+                    public String visitNotFoundByMatchingParameters() {
+                        return lines(
+                                "There is a "
+                                        + targetType
+                                                .accept(new TargetType.Visitor() {
+                                                    @Override
+                                                    public String visitMethod() {
+                                                        return "method";
+                                                    }
+
+                                                    @Override
+                                                    public String visitField() {
+                                                        return "field";
+                                                    }
+
+                                                    @Override
+                                                    public String visitConstructor() {
+                                                        return "constructor";
+                                                    }
+                                                }) + " with name", "  '"
+                                        + target.memberName() + "'",
+                                "but its parameters",
+                                "  (long, double, String)",
+                                "do not match given parameters",
+                                "  (String \"foo\")");
+                    }
+                }),
                 "in target object of class",
                 "  'org.jreflect.methods.fixture.ClassWithInstanceMethods'.",
                 "",
@@ -167,16 +228,7 @@ public class ReflectException extends RuntimeException {
                 "   + private Integer superclassMethodWithParametersAndReturnValue(long, double, String)",
                 "",
                 "Superclass of 'SuperclassWithInstanceMethods' is java.lang.Object.",
-                "", "TARGET OBJECT:", "--------------", "",
-                targetObject.toString(), "");
-    }
-
-    private static String lines(final Object... lines) {
-        final StringBuilder buffer = new StringBuilder();
-        for (final Object line : lines) {
-            buffer.append(line.toString());
-            buffer.append("\n");
-        }
-        return buffer.toString();
+                "", "TARGET OBJECT:", "--------------", "", target
+                        .targetObject().toString(), "\n");
     }
 }

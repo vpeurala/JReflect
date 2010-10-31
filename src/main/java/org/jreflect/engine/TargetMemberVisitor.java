@@ -1,6 +1,6 @@
 package org.jreflect.engine;
 
-public interface TargetVisitor<ReturnType> {
+public interface TargetMemberVisitor<ReturnType> {
     ReturnType visitObject(Object object);
 
     ReturnType visitClass(Class<?> klass);

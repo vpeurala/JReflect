@@ -1,32 +1,25 @@
 package org.jreflect.domain;
 
-import static org.jreflect.engine.Methods.invokeVoidMethod;
+import org.jreflect.engine.TargetMember;
 
 public class RMethodWithTarget {
-    private final String name;
-    private final Object targetObject;
-    private final Class<?> targetClass;
+    private final String methodName;
+    private final TargetMember target;
 
-    public RMethodWithTarget(final String name, final Class<?> targetClass) {
-        this(name, null, targetClass);
+    public RMethodWithTarget(final String methodName, final Class<?> targetClass) {
+        this(methodName, TargetMember.forClass(methodName, targetClass));
     }
 
-    public RMethodWithTarget(final String name, final Object targetObject) {
-        this(name, targetObject, null);
+    public RMethodWithTarget(final String methodName, final Object targetObject) {
+        this(methodName, TargetMember.forObject(methodName, targetObject));
     }
 
-    private RMethodWithTarget(final String name, final Object targetObject,
-            final Class<?> targetClass) {
-        this.name = name;
-        this.targetObject = targetObject;
-        this.targetClass = targetClass;
+    private RMethodWithTarget(final String methodName, final TargetMember target) {
+        this.methodName = methodName;
+        this.target = target;
     }
 
     public void invoke(final Object... args) {
-        if (targetObject != null) {
-            invokeVoidMethod(targetObject, name, args);
-        } else {
-            invokeVoidMethod(targetClass, name, args);
-        }
+        target.forMethod(methodName, Object.class, args).invoke();
     }
 }

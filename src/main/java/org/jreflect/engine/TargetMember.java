@@ -2,22 +2,27 @@ package org.jreflect.engine;
 
 import org.jreflect.domain.ReflectException.InvocationType;
 
-public class Target implements VisitableWithTargetVisitor {
+public class TargetMember implements VisitableWithTargetMemberVisitor {
+    private final String memberName;
     private final Object object;
     private final Class<?> klass;
 
-    public static Target forObject(final Object object) {
+    public static TargetMember forObject(final String memberName,
+            final Object object) {
         if (object instanceof Class<?>) {
-            return forClass((Class<?>) object);
+            return forClass(memberName, (Class<?>) object);
         }
-        return new Target(object, null);
+        return new TargetMember(memberName, object, null);
     }
 
-    public static Target forClass(final Class<?> klass) {
-        return new Target(null, klass);
+    public static TargetMember forClass(final String memberName,
+            final Class<?> klass) {
+        return new TargetMember(memberName, null, klass);
     }
 
-    private Target(final Object object, final Class<?> klass) {
+    private TargetMember(final String memberName, final Object object,
+            final Class<?> klass) {
+        this.memberName = memberName;
         this.object = object;
         this.klass = klass;
     }
@@ -35,7 +40,8 @@ public class Target implements VisitableWithTargetVisitor {
     }
 
     @Override
-    public <ReturnType> ReturnType accept(final TargetVisitor<ReturnType> v) {
+    public <ReturnType> ReturnType accept(
+            final TargetMemberVisitor<ReturnType> v) {
         if (object != null) {
             return v.visitObject(object);
         } else {
@@ -48,7 +54,7 @@ public class Target implements VisitableWithTargetVisitor {
     }
 
     public Class<?> targetClass() {
-        return accept(new TargetVisitor<Class<?>>() {
+        return accept(new TargetMemberVisitor<Class<?>>() {
             @Override
             public Class<?> visitObject(final Object targetObject) {
                 return targetObject.getClass();
@@ -62,7 +68,7 @@ public class Target implements VisitableWithTargetVisitor {
     }
 
     public InvocationType invocationType() {
-        return accept(new TargetVisitor<InvocationType>() {
+        return accept(new TargetMemberVisitor<InvocationType>() {
             @Override
             public InvocationType visitObject(final Object targetObject) {
                 return InvocationType.INSTANCE;
@@ -73,5 +79,9 @@ public class Target implements VisitableWithTargetVisitor {
                 return InvocationType.STATIC;
             }
         });
+    }
+
+    public String memberName() {
+        return memberName;
     }
 }

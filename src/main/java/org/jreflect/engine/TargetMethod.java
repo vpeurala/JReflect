@@ -6,17 +6,16 @@ import java.util.List;
 
 import org.jreflect.domain.ReflectException;
 import org.jreflect.domain.ReflectException.FailureType;
-import org.jreflect.domain.ReflectException.InvocationType;
 import org.jreflect.domain.ReflectException.TargetType;
 
 public class TargetMethod<ReturnType> {
-    private final Target target;
+    private final TargetMember target;
     private final String methodName;
     private final Class<ReturnType> returnType;
     private final Object[] arguments;
     private final Method targetMethod;
 
-    TargetMethod(final Target target, final String methodName,
+    TargetMethod(final TargetMember target, final String methodName,
             final Class<ReturnType> returnType, final Object... arguments) {
         this.target = target;
         this.methodName = methodName;
@@ -50,19 +49,24 @@ public class TargetMethod<ReturnType> {
         final List<Method> methods = Methods
                 .allMethodsOfClassAndSuperclasses(target.targetClass());
         final Arguments arguments2 = new Arguments(arguments);
+        boolean foundByName = false;
         for (final Method method : methods) {
+            if (method.getName().equals(methodName)) {
+                foundByName = true;
+            }
             if (method.getName().equals(methodName)
                     && arguments2.matchesMethod(method)) {
                 // FIXME VP                    && method.getReturnType().equals(returnType)) {
                 return method;
             }
         }
-        throw reflectException();
+        throw reflectException(foundByName);
     }
 
-    private ReflectException reflectException() {
+    private ReflectException reflectException(final boolean foundByName) {
         // FIXME VP Wrong parameters
-        return new ReflectException(TargetType.METHOD, InvocationType.INSTANCE,
-                FailureType.NOT_FOUND_BY_NAME, target);
+        return new ReflectException(TargetType.METHOD, target.invocationType(),
+                foundByName ? FailureType.NOT_FOUND_BY_MATCHING_PARAMETERS
+                        : FailureType.NOT_FOUND_BY_NAME, target);
     }
 }
