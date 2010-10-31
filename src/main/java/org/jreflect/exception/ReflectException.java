@@ -1,8 +1,5 @@
 package org.jreflect.exception;
 
-import static java.lang.reflect.Modifier.isPrivate;
-import static java.lang.reflect.Modifier.isProtected;
-import static java.lang.reflect.Modifier.isPublic;
 import static org.jreflect.engine.Methods.allMethodsOfClass;
 import static org.jreflect.util.CollectionUtil.map;
 import static org.jreflect.util.StringUtil.join;
@@ -10,9 +7,7 @@ import static org.jreflect.util.StringUtil.lines;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 import org.jreflect.engine.TargetMember;
 import org.jreflect.util.CollectionUtil.Transformer;
@@ -122,30 +117,10 @@ public class ReflectException extends RuntimeException {
     }
 
     private static String formatMethod(final Method inputMethod) {
-        return "   + " + formatModifiers(inputMethod.getModifiers()) + " "
+        return "   + " + Modifier.toString(inputMethod.getModifiers()) + " "
                 + inputMethod.getReturnType().getSimpleName() + " "
                 + inputMethod.getName() + "("
                 + formatParameterTypes(inputMethod.getParameterTypes()) + ")";
-    }
-
-    private static String formatModifiers(final int modifiers) {
-        final List<String> keywords = new ArrayList<String>();
-        if (isPublic(modifiers)) {
-            keywords.add("public");
-        } else if (isProtected(modifiers)) {
-            keywords.add("protected");
-        } else if (isPrivate(modifiers)) {
-            keywords.add("private");
-        }
-        if (Modifier.isAbstract(modifiers)) {
-            keywords.add("abstract");
-        } else if (Modifier.isFinal(modifiers)) {
-            keywords.add("final");
-        }
-        if (Modifier.isStatic(modifiers)) {
-            keywords.add("static");
-        }
-        return join(keywords, " ");
     }
 
     private static String formatParameterTypes(final Class<?>[] parameterTypes) {
