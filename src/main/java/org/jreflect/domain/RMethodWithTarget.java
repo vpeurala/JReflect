@@ -20,6 +20,6 @@ public class RMethodWithTarget {
     }
 
     public void invoke(final Object... args) {
-        target.forMethod(methodName, Object.class, args).invoke();
+        target.forMethodDiscardingReturnValue(methodName, args).invoke();
     }
 }

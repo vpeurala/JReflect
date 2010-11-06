@@ -7,6 +7,8 @@ TODO:
 + Exceptions from incorrect usage
 + Strings as args like objects and classes, to enable invocation without compile-time dependency
 + Invoking varargs methods & constructors
++ Using class java.lang.Void explicitly as return type
++ Invoke with single null parameter
 
 DONE:
 -----

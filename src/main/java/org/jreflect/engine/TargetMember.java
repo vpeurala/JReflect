@@ -27,11 +27,16 @@ public class TargetMember implements VisitableWithTargetMemberVisitor {
         this.klass = klass;
     }
 
-    public <ReturnType> TargetMethod<ReturnType> forMethod(
+    public TargetMethodWithoutReturnValue forMethodDiscardingReturnValue(
+            final String methodName, final Object... arguments) {
+        return new TargetMethodWithoutReturnValue(this, methodName, arguments);
+    }
+
+    public <ReturnType> TargetMethodWithReturnValue<ReturnType> forMethodKeepingReturnValue(
             final String methodName, final Class<ReturnType> returnType,
             final Object... arguments) {
-        return new TargetMethod<ReturnType>(this, methodName, returnType,
-                arguments);
+        return new TargetMethodWithReturnValue<ReturnType>(this, methodName,
+                returnType, arguments);
     }
 
     public <FieldType> TargetField<FieldType> forField(final String fieldName,

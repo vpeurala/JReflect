@@ -19,7 +19,7 @@ public class IncorrectUsageExceptionTest {
         } catch (final ReflectException e) {
             final String expectedErrorMessage = lines(
                     "",
-                    "*** METHOD NOT FOUND BY NAME FROM OBJECT INSTANCE *** ",
+                    "*** METHOD NOT FOUND BY NAME FROM OBJECT INSTANCE ***",
                     "",
                     "REASON FOR THIS EXCEPTION:",
                     "--------------------------",
@@ -44,7 +44,7 @@ public class IncorrectUsageExceptionTest {
         } catch (final ReflectException e) {
             final String expectedErrorMessage = lines(
                     "",
-                    "*** METHOD NOT FOUND BY PARAMETERS FROM OBJECT INSTANCE *** ",
+                    "*** METHOD NOT FOUND BY PARAMETERS FROM OBJECT INSTANCE ***",
                     "",
                     "REASON FOR THIS EXCEPTION:",
                     "--------------------------",
@@ -54,6 +54,37 @@ public class IncorrectUsageExceptionTest {
                     "  (long, double, String)",
                     "do not match given parameters",
                     "  (String \"foo\")",
+                    "in target object of class",
+                    "  'org.jreflect.methods.fixture.ClassWithInstanceMethods'.",
+                    "", hierarchyOfClassWithInstanceMethods(),
+                    "TARGET OBJECT:", "--------------",
+                    targetObject.toString(), "\n");
+            assertEquals(expectedErrorMessage, e.getMessage());
+        }
+    }
+
+    @Test
+    public void niceErrorMessageFromIncorrectReturnTypeOnFoundInstanceMethod() {
+        final ClassWithInstanceMethods targetObject = new ClassWithInstanceMethods();
+        try {
+            method("methodWithParametersAndReturnValue")
+                    .withReturnType(String.class).in(targetObject)
+                    .invoke(1, 2, "gurp");
+            fail();
+        } catch (final ReflectException e) {
+            final String expectedErrorMessage = lines(
+                    "",
+                    "*** METHOD NOT FOUND BY RETURN TYPE FROM OBJECT INSTANCE ***",
+                    "",
+                    "REASON FOR THIS EXCEPTION:",
+                    "--------------------------",
+                    "There is a method with name",
+                    "  'methodWithParametersAndReturnValue'",
+                    "and its parameters match",
+                    "but its return type",
+                    "  (void)",
+                    "does not match the given return type",
+                    "  (String)",
                     "in target object of class",
                     "  'org.jreflect.methods.fixture.ClassWithInstanceMethods'.",
                     "", hierarchyOfClassWithInstanceMethods(),

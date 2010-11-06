@@ -48,7 +48,7 @@ public class ReflectException extends RuntimeException {
                         + "FROM "
                         + invocationType
                                 .accept(new InvocationTypeFromVisitor())
-                        + " *** ",
+                        + " ***",
                 "",
                 "REASON FOR THIS EXCEPTION:",
                 "--------------------------",
@@ -65,9 +65,19 @@ public class ReflectException extends RuntimeException {
 
                     @Override
                     public String visitNotFoundByMatchingReturnType() {
-                        // FIXME Auto-generated method stub
-                        throw new UnsupportedOperationException(
-                                "visitNotFoundByMatchingReturnType");
+                        return lines(
+                                "There is a "
+                                        + targetType
+                                                .accept(new TargetTypeNameVisitor())
+                                        + " with name",
+                                "  '" + target.memberName() + "'",
+                                "and its parameters match",
+                                // TODO VP Show the parameters
+                                "but its return type",
+                                // FIXME VP Hardcoded shite
+                                "  (void)",
+                                "does not match the given return type",
+                                "  (String)");
                     }
 
                     @Override

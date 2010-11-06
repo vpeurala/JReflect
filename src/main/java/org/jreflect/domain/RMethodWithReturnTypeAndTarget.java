@@ -27,7 +27,8 @@ public class RMethodWithReturnTypeAndTarget<ReturnType> {
     }
 
     public ReturnType invoke(final Object... args) {
-        return returnType.cast(target.forMethod(methodName, returnType, args)
-                .invoke());
+        return returnType.cast(target
+                .forMethodKeepingReturnValue(methodName, returnType, args)
+                .invoke().returnValue());
     }
 }
