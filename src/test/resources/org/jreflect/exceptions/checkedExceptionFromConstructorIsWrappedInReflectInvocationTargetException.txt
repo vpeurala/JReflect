@@ -1,0 +1,6 @@
+org.jreflect.exception.ReflectInvocationTargetException: 
+Invocation raised a checked exception:
+  java.io.IOException {
+    "4"
+      at org.jreflect.exceptions.fixture.ClassWhichThrowsExceptions.<init>(ClassWhichThrowsExceptions.java:19)
+  }.

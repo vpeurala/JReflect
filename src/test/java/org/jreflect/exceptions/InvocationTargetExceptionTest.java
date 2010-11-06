@@ -5,9 +5,13 @@ import static org.jreflect.Reflect.method;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 import org.jreflect.exception.ReflectException;
+import org.jreflect.exception.ReflectInvocationTargetException;
 import org.jreflect.exceptions.fixture.ClassWhichThrowsExceptions;
 import org.junit.Test;
 
@@ -49,7 +53,7 @@ public class InvocationTargetExceptionTest {
     }
 
     @Test
-    public void checkedExceptionFromStaticMethodIsWrappedInJReflectException() {
+    public void checkedExceptionFromStaticMethodIsWrappedInReflectInvocationTargetException() {
         try {
             method("staticMethodWhichThrowsCheckedException").in(
                     ClassWhichThrowsExceptions.class).invoke();
@@ -58,6 +62,9 @@ public class InvocationTargetExceptionTest {
             final Throwable cause = e.getCause();
             assertEquals(IOException.class, cause.getClass());
             assertEquals("foo!!!", cause.getMessage());
+            assertEquals(
+                    expectedErrorMessage("checkedExceptionFromStaticMethodIsWrappedInReflectInvocationTargetException.txt"),
+                    e.toString());
         }
     }
 
@@ -84,14 +91,17 @@ public class InvocationTargetExceptionTest {
     }
 
     @Test
-    public void checkedExceptionFromConstructorIsWrappedInJReflectException() {
+    public void checkedExceptionFromConstructorIsWrappedInReflectInvocationTargetException() {
         try {
             constructorOf(ClassWhichThrowsExceptions.class).invoke(4);
             fail();
-        } catch (final ReflectException e) {
+        } catch (final ReflectInvocationTargetException e) {
             final Throwable cause = e.getCause();
             assertEquals(IOException.class, cause.getClass());
             assertEquals("4", cause.getMessage());
+            assertEquals(
+                    expectedErrorMessage("checkedExceptionFromConstructorIsWrappedInReflectInvocationTargetException.txt"),
+                    e.toString());
         }
     }
 
@@ -113,5 +123,25 @@ public class InvocationTargetExceptionTest {
         } catch (final OutOfMemoryError e) {
             assertEquals("true", e.getMessage());
         }
+    }
+
+    private String expectedErrorMessage(final String name) {
+        final InputStream stream = getClass().getResourceAsStream(name);
+        if (stream == null) {
+            throw new RuntimeException("Resource not found: '" + name + "'.");
+        }
+        final InputStreamReader reader = new InputStreamReader(stream);
+        final BufferedReader bufferedReader = new BufferedReader(reader);
+        final StringBuilder buffer = new StringBuilder();
+        String line = null;
+        try {
+            while ((line = bufferedReader.readLine()) != null) {
+                buffer.append(line + "\n");
+            }
+            bufferedReader.close();
+        } catch (final IOException e) {
+            throw new RuntimeException(e);
+        }
+        return buffer.toString();
     }
 }

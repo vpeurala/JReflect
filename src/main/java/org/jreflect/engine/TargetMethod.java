@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.jreflect.exception.FailureType;
 import org.jreflect.exception.ReflectException;
+import org.jreflect.exception.ReflectInvocationTargetException;
 import org.jreflect.exception.TargetType;
 
 public class TargetMethod<ReturnType> {
@@ -40,7 +41,7 @@ public class TargetMethod<ReturnType> {
             } else if (cause instanceof Error) {
                 throw (Error) cause;
             } else {
-                throw new ReflectException(e.getCause());
+                throw new ReflectInvocationTargetException(e.getCause());
             }
         }
     }

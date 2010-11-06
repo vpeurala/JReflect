@@ -19,8 +19,19 @@ public class ReflectException extends RuntimeException {
         super(buildMessage(targetType, invocationType, failureType, target));
     }
 
-    public ReflectException(final Throwable cause) {
-        super(cause);
+    protected ReflectException(final Throwable cause) {
+        super("\nInvocation raised a checked exception:\n  "
+                + cause.getClass().getName() + " {\n" + "    \""
+                + cause.getMessage() + "\"\n"
+                + formatStackTrace(cause.getStackTrace()) + "  }.\n", cause);
+    }
+
+    private static String formatStackTrace(final StackTraceElement[] stackTrace) {
+        final StringBuilder buffer = new StringBuilder();
+        final StackTraceElement frame = stackTrace[0];
+        buffer.append("      at " + frame.toString());
+        buffer.append('\n');
+        return buffer.toString();
     }
 
     private static String buildMessage(final TargetType targetType,

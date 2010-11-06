@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.jreflect.exception.ReflectException;
+import org.jreflect.exception.ReflectInvocationTargetException;
 
 public class Constructors {
     @SuppressWarnings("unchecked")
@@ -61,7 +61,7 @@ public class Constructors {
             } else if (cause instanceof Error) {
                 throw (Error) cause;
             } else {
-                throw new ReflectException(e.getCause());
+                throw new ReflectInvocationTargetException(e.getCause());
             }
         }
     }
