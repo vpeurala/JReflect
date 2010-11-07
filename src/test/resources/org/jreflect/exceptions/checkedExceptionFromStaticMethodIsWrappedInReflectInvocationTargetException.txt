@@ -1,6 +1,0 @@
-org.jreflect.exception.ReflectInvocationTargetException: 
-Invocation raised a checked exception:
-  java.io.IOException {
-    "foo!!!"
-      at org.jreflect.exceptions.fixture.ClassWhichThrowsExceptions.staticMethodWhichThrowsCheckedException(ClassWhichThrowsExceptions.java:40)
-  }.

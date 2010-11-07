@@ -8,9 +8,9 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
 
-import org.jreflect.exception.FailureType;
+import org.jreflect.exception.InvocationTargetReflectException;
+import org.jreflect.exception.MethodInvocationReflectException;
 import org.jreflect.exception.ReflectException;
-import org.jreflect.exception.ReflectInvocationTargetException;
 import org.jreflect.exception.TargetType;
 
 public abstract class TargetMethod<SelfType> {
@@ -47,7 +47,7 @@ public abstract class TargetMethod<SelfType> {
             } else if (cause instanceof Error) {
                 throw (Error) cause;
             } else {
-                throw new ReflectInvocationTargetException(e.getCause());
+                throw new InvocationTargetReflectException(e.getCause());
             }
         }
         return (SelfType) this;
@@ -60,30 +60,31 @@ public abstract class TargetMethod<SelfType> {
                 .allMethodsOfClassAndSuperclasses(target.targetClass());
         boolean foundByName = false;
         boolean foundByParams = false;
+        Method closestMatch = null;
         for (final Method method : methods) {
             if (method.getName().equals(methodName)) {
                 foundByName = true;
+                closestMatch = method;
             }
             if (method.getName().equals(methodName)
                     && arguments.matchesMethod(method)) {
                 foundByParams = true;
+                closestMatch = method;
                 if (candidateMethodMatches(method)) {
                     return method;
                 }
             }
         }
         if (!foundByName) {
-            throw reflectException(NOT_FOUND_BY_NAME);
+            throw new ReflectException(TargetType.METHOD,
+                    target.invocationType(), NOT_FOUND_BY_NAME, target);
         } else if (!foundByParams) {
-            throw reflectException(NOT_FOUND_BY_MATCHING_PARAMETERS);
+            throw new MethodInvocationReflectException(target.invocationType(),
+                    NOT_FOUND_BY_MATCHING_PARAMETERS, target, closestMatch);
         } else {
-            throw reflectException(NOT_FOUND_BY_MATCHING_RETURN_TYPE);
+            throw new ReflectException(TargetType.METHOD,
+                    target.invocationType(), NOT_FOUND_BY_MATCHING_RETURN_TYPE,
+                    target);
         }
-    }
-
-    private final ReflectException reflectException(
-            final FailureType failureType) {
-        return new ReflectException(TargetType.METHOD, target.invocationType(),
-                failureType, target);
     }
 }

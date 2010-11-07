@@ -5,6 +5,7 @@ import static org.jreflect.util.CollectionUtil.map;
 import static org.jreflect.util.StringUtil.join;
 import static org.jreflect.util.StringUtil.lines;
 
+import java.lang.reflect.Member;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
@@ -17,14 +18,16 @@ class ReflectExceptionMessageBuilder {
     private final InvocationType invocationType;
     private final FailureType failureType;
     private final TargetMember target;
+    private final Member closestMatch;
 
     public ReflectExceptionMessageBuilder(final TargetType targetType,
             final InvocationType invocationType, final FailureType failureType,
-            final TargetMember target) {
+            final TargetMember target, final Member closestMatch) {
         this.targetType = targetType;
         this.invocationType = invocationType;
         this.failureType = failureType;
         this.target = target;
+        this.closestMatch = closestMatch;
     }
 
     public String buildMessage() {
@@ -43,7 +46,7 @@ class ReflectExceptionMessageBuilder {
                 "",
                 "REASON FOR THIS EXCEPTION:",
                 "--------------------------",
-                failureType.accept(new FailureType.Visitor() {
+                failureType.accept(new FailureTypeVisitor() {
                     @Override
                     public String visitNotFoundByName() {
                         return lines(
@@ -52,6 +55,22 @@ class ReflectExceptionMessageBuilder {
                                                 .accept(new TargetTypeNameVisitor())
                                         + " named", "  '" + target.memberName()
                                         + "'");
+                    }
+
+                    @Override
+                    public String visitNotFoundByMatchingParameters() {
+                        return lines(
+                                "There is a "
+                                        + targetType
+                                                .accept(new TargetTypeNameVisitor())
+                                        + " with name",
+                                "  '" + target.memberName() + "'",
+                                "but its parameters",
+                                "  ("
+                                        + formatParameterTypes(((Method) closestMatch)
+                                                .getParameterTypes()) + ")",
+                                "do not match given parameters",
+                                "  (String \"foo\")");
                     }
 
                     @Override
@@ -70,22 +89,7 @@ class ReflectExceptionMessageBuilder {
                                 "does not match the given return type",
                                 "  (String)");
                     }
-
-                    @Override
-                    public String visitNotFoundByMatchingParameters() {
-                        return lines(
-                                "There is a "
-                                        + targetType
-                                                .accept(new TargetTypeNameVisitor())
-                                        + " with name",
-                                "  '" + target.memberName() + "'",
-                                "but its parameters",
-                                // FIXME VP Hardcoded shite
-                                "  (long, double, String)",
-                                "do not match given parameters",
-                                "  (String \"foo\")");
-                    }
-                }), "in " + invocationType.accept(new InvocationType.Visitor() {
+                }), "in " + invocationType.accept(new InvocationTypeVisitor() {
                     @Override
                     public String visitStatic() {
                         return "target class";
@@ -97,7 +101,7 @@ class ReflectExceptionMessageBuilder {
                     }
                 }), "  '" + target.targetClass().getName() + "'.", "",
                 formatMethodsOfClassHierarchy(target.targetClass()),
-                invocationType.accept(new InvocationType.Visitor() {
+                invocationType.accept(new InvocationTypeVisitor() {
                     @Override
                     public String visitStatic() {
                         return "";
@@ -116,7 +120,7 @@ class ReflectExceptionMessageBuilder {
                 "EXISTING METHODS IN THE TARGET CLASS HIERARCHY:",
                 "-----------------------------------------------",
                 "Methods declared in the "
-                        + invocationType.accept(new InvocationType.Visitor() {
+                        + invocationType.accept(new InvocationTypeVisitor() {
                             @Override
                             public String visitInstance() {
                                 return "class of the target object";

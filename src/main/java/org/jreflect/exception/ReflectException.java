@@ -9,6 +9,10 @@ public class ReflectException extends RuntimeException {
         super(buildMessage(targetType, invocationType, failureType, target));
     }
 
+    protected ReflectException(final String message) {
+        super(message);
+    }
+
     protected ReflectException(final Throwable cause) {
         super("\nInvocation raised a checked exception:\n  "
                 + cause.getClass().getName() + " {\n" + "    \""
@@ -28,6 +32,6 @@ public class ReflectException extends RuntimeException {
             final InvocationType invocationType, final FailureType failureType,
             final TargetMember target) {
         return new ReflectExceptionMessageBuilder(targetType, invocationType,
-                failureType, target).buildMessage();
+                failureType, target, null).buildMessage();
     }
 }

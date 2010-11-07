@@ -7,6 +7,7 @@ import static org.junit.Assert.fail;
 
 import org.jreflect.exception.ReflectException;
 import org.jreflect.methods.fixture.ClassWithStaticMethods;
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class IncorrectUsageOfStaticMethodsExceptionTest {
@@ -69,6 +70,15 @@ public class IncorrectUsageOfStaticMethodsExceptionTest {
                     "", hierarchyOfClassWithStaticMethods(), "\n");
             assertEquals(expectedErrorMessage, e.getMessage());
         }
+    }
+
+    // TODO VP Remove this
+    @Ignore
+    @Test
+    public void see() {
+        method("methodWithParametersAndReturnValue")
+                .withReturnType(String.class).in(ClassWithStaticMethods.class)
+                .invoke(1, 2, "gurp");
     }
 
     private String hierarchyOfClassWithStaticMethods() {

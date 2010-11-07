@@ -1,7 +1,7 @@
 package org.jreflect.exception;
 
 
-class TargetTypeNameVisitor implements TargetType.Visitor {
+class TargetTypeNameVisitor implements TargetTypeVisitor {
     @Override
     public String visitMethod() {
         return "method";

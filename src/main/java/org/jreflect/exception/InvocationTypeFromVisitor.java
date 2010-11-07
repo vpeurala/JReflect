@@ -1,7 +1,7 @@
 package org.jreflect.exception;
 
 
-class InvocationTypeFromVisitor implements InvocationType.Visitor {
+class InvocationTypeFromVisitor implements InvocationTypeVisitor {
     @Override
     public String visitStatic() {
         return "CLASS";

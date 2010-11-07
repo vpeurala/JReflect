@@ -2,16 +2,14 @@ package org.jreflect.exceptions;
 
 import static org.jreflect.Reflect.constructorOf;
 import static org.jreflect.Reflect.method;
+import static org.jreflect.util.StringUtil.lines;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 
+import org.jreflect.exception.InvocationTargetReflectException;
 import org.jreflect.exception.ReflectException;
-import org.jreflect.exception.ReflectInvocationTargetException;
 import org.jreflect.exceptions.fixture.ClassWhichThrowsExceptions;
 import org.junit.Test;
 
@@ -62,9 +60,14 @@ public class InvocationTargetExceptionTest {
             final Throwable cause = e.getCause();
             assertEquals(IOException.class, cause.getClass());
             assertEquals("foo!!!", cause.getMessage());
-            assertEquals(
-                    expectedErrorMessage("checkedExceptionFromStaticMethodIsWrappedInReflectInvocationTargetException.txt"),
-                    e.toString());
+            final String expectedErrorMessage = lines(
+                    "org.jreflect.exception.InvocationTargetReflectException: ",
+                    "Invocation raised a checked exception:",
+                    "  java.io.IOException {",
+                    "    \"foo!!!\"",
+                    "      at org.jreflect.exceptions.fixture.ClassWhichThrowsExceptions.staticMethodWhichThrowsCheckedException(ClassWhichThrowsExceptions.java:40)",
+                    "  }.\n");
+            assertEquals(expectedErrorMessage, e.toString());
         }
     }
 
@@ -95,13 +98,18 @@ public class InvocationTargetExceptionTest {
         try {
             constructorOf(ClassWhichThrowsExceptions.class).invoke(4);
             fail();
-        } catch (final ReflectInvocationTargetException e) {
+        } catch (final InvocationTargetReflectException e) {
             final Throwable cause = e.getCause();
             assertEquals(IOException.class, cause.getClass());
             assertEquals("4", cause.getMessage());
-            assertEquals(
-                    expectedErrorMessage("checkedExceptionFromConstructorIsWrappedInReflectInvocationTargetException.txt"),
-                    e.toString());
+            final String expectedErrorMessage = lines(
+                    "org.jreflect.exception.InvocationTargetReflectException: ",
+                    "Invocation raised a checked exception:",
+                    "  java.io.IOException {",
+                    "    \"4\"",
+                    "      at org.jreflect.exceptions.fixture.ClassWhichThrowsExceptions.<init>(ClassWhichThrowsExceptions.java:19)",
+                    "  }.\n");
+            assertEquals(expectedErrorMessage, e.toString());
         }
     }
 
@@ -123,25 +131,5 @@ public class InvocationTargetExceptionTest {
         } catch (final OutOfMemoryError e) {
             assertEquals("true", e.getMessage());
         }
-    }
-
-    private String expectedErrorMessage(final String name) {
-        final InputStream stream = getClass().getResourceAsStream(name);
-        if (stream == null) {
-            throw new RuntimeException("Resource not found: '" + name + "'.");
-        }
-        final InputStreamReader reader = new InputStreamReader(stream);
-        final BufferedReader bufferedReader = new BufferedReader(reader);
-        final StringBuilder buffer = new StringBuilder();
-        String line = null;
-        try {
-            while ((line = bufferedReader.readLine()) != null) {
-                buffer.append(line + "\n");
-            }
-            bufferedReader.close();
-        } catch (final IOException e) {
-            throw new RuntimeException(e);
-        }
-        return buffer.toString();
     }
 }
