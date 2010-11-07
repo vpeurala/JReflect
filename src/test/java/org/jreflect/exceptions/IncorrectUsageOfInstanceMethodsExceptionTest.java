@@ -9,7 +9,7 @@ import org.jreflect.exception.ReflectException;
 import org.jreflect.methods.fixture.ClassWithInstanceMethods;
 import org.junit.Test;
 
-public class IncorrectUsageExceptionTest {
+public class IncorrectUsageOfInstanceMethodsExceptionTest {
     @Test
     public void niceErrorMessageFromInstanceMethodNotFoundByName() {
         final ClassWithInstanceMethods targetObject = new ClassWithInstanceMethods();
