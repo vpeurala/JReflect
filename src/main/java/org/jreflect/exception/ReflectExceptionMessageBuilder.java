@@ -85,9 +85,18 @@ class ReflectExceptionMessageBuilder {
                                 "do not match given parameters",
                                 "  (String \"foo\")");
                     }
-                }), "in target object of class",
-                "  'org.jreflect.methods.fixture.ClassWithInstanceMethods'.",
-                "", formatMethodsOfClassHierarchy(target.targetClass()),
+                }), "in " + invocationType.accept(new InvocationType.Visitor() {
+                    @Override
+                    public String visitStatic() {
+                        return "target class";
+                    }
+
+                    @Override
+                    public String visitInstance() {
+                        return "target object of class";
+                    }
+                }), "  '" + target.targetClass().getName() + "'.", "",
+                formatMethodsOfClassHierarchy(target.targetClass()),
                 invocationType.accept(new InvocationType.Visitor() {
                     @Override
                     public String visitStatic() {
