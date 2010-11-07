@@ -14,6 +14,19 @@ import org.jreflect.engine.TargetMember;
 import org.jreflect.util.CollectionUtil.Transformer;
 
 class ReflectExceptionMessageBuilder {
+    private final class StaticOrNothingInvocationTypeVisitor implements
+            InvocationTypeVisitor {
+        @Override
+        public String visitStatic() {
+            return "static ";
+        }
+
+        @Override
+        public String visitInstance() {
+            return "";
+        }
+    }
+
     private final TargetType targetType;
     private final InvocationType invocationType;
     private final FailureType failureType;
@@ -34,6 +47,9 @@ class ReflectExceptionMessageBuilder {
         return lines(
                 "",
                 "*** "
+                        + invocationType.accept(
+                                new StaticOrNothingInvocationTypeVisitor())
+                                .toUpperCase()
                         + targetType.accept(new TargetTypeNameVisitor())
                                 .toUpperCase()
                         + " "
@@ -112,12 +128,49 @@ class ReflectExceptionMessageBuilder {
                         return lines("", "TARGET OBJECT:", "--------------",
                                 target.targetObject().toString());
                     }
+                }) + invocationType.accept(new InvocationTypeVisitor() {
+                    @Override
+                    public String visitInstance() {
+                        return "";
+                    }
+
+                    @Override
+                    public String visitStatic() {
+                        return lines(
+                                "",
+                                "Are you sure you intended to invoke method in(<Class<?> || Object>)",
+                                findStackFrameWithInInvocation(),
+                                "with a class ("
+                                        + target.targetClass().getName()
+                                        + ") instead of an object instance?");
+                    }
+
+                    private String findStackFrameWithInInvocation() {
+                        final StackTraceElement[] stackTrace = getStackTraceWithInInvocation();
+                        boolean found = false;
+                        for (final StackTraceElement frame : stackTrace) {
+                            if (frame.getMethodName().equals("in")) {
+                                found = true;
+                            } else if (found) {
+                                return "  at " + frame;
+                            }
+                        }
+                        return "";
+                    }
+
+                    private StackTraceElement[] getStackTraceWithInInvocation() {
+                        return StackTraces.find("in");
+                    }
                 }), "\n");
     }
 
     private String formatMethodsOfClassHierarchy(final Class<?> klass) {
         return lines(
-                "EXISTING METHODS IN THE TARGET CLASS HIERARCHY:",
+                "EXISTING "
+                        + invocationType.accept(
+                                new StaticOrNothingInvocationTypeVisitor())
+                                .toUpperCase() + "METHODS "
+                        + "IN THE TARGET CLASS HIERARCHY:",
                 "-----------------------------------------------",
                 "Methods declared in the "
                         + invocationType.accept(new InvocationTypeVisitor() {

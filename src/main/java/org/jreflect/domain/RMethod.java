@@ -1,5 +1,7 @@
 package org.jreflect.domain;
 
+import org.jreflect.exception.StackTraces;
+
 public class RMethod {
     private final String methodName;
 
@@ -8,14 +10,22 @@ public class RMethod {
     }
 
     public RMethodWithTarget in(final Class<?> targetClass) {
-        return new RMethodWithTarget(methodName, targetClass);
+        try {
+            return new RMethodWithTarget(methodName, targetClass);
+        } finally {
+            StackTraces.store("in");
+        }
     }
 
     public RMethodWithTarget in(final Object targetObject) {
-        if (targetObject instanceof Class<?>) {
-            return in((Class<?>) targetObject);
-        } else {
-            return new RMethodWithTarget(methodName, targetObject);
+        try {
+            if (targetObject instanceof Class<?>) {
+                return in((Class<?>) targetObject);
+            } else {
+                return new RMethodWithTarget(methodName, targetObject);
+            }
+        } finally {
+            StackTraces.store("in");
         }
     }
 

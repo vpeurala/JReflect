@@ -18,13 +18,22 @@ public class IncorrectUsageOfStaticMethodsExceptionTest {
                     .invoke();
             fail();
         } catch (final ReflectException e) {
-            final String expectedErrorMessage = lines("",
-                    "*** METHOD NOT FOUND BY NAME FROM CLASS ***", "",
-                    "REASON FOR THIS EXCEPTION:", "--------------------------",
-                    "There is no method named", "  'methodWhichDoesNotExist'",
+            final String expectedErrorMessage = lines(
+                    "",
+                    "*** STATIC METHOD NOT FOUND BY NAME FROM CLASS ***",
+                    "",
+                    "REASON FOR THIS EXCEPTION:",
+                    "--------------------------",
+                    "There is no method named",
+                    "  'methodWhichDoesNotExist'",
                     "in target class",
                     "  'org.jreflect.methods.fixture.ClassWithStaticMethods'.",
-                    "", hierarchyOfClassWithStaticMethods(), "\n");
+                    "",
+                    hierarchyOfClassWithStaticMethods(),
+                    "Are you sure you intended to invoke method in(<Class<?> || Object>)",
+                    "  at org.jreflect.exceptions.IncorrectUsageOfStaticMethodsExceptionTest.niceErrorMessageFromStaticMethodNotFoundByName(IncorrectUsageOfStaticMethodsExceptionTest.java:17)",
+                    "with a class (org.jreflect.methods.fixture.ClassWithStaticMethods) instead of an object instance?",
+                    "\n");
             assertEquals(expectedErrorMessage, e.getMessage());
         }
     }
@@ -36,16 +45,26 @@ public class IncorrectUsageOfStaticMethodsExceptionTest {
                     ClassWithStaticMethods.class).invoke("foo");
             fail();
         } catch (final ReflectException e) {
-            final String expectedErrorMessage = lines("",
-                    "*** METHOD NOT FOUND BY PARAMETERS FROM CLASS ***", "",
-                    "REASON FOR THIS EXCEPTION:", "--------------------------",
+            final String expectedErrorMessage = lines(
+                    "",
+                    "*** STATIC METHOD NOT FOUND BY PARAMETERS FROM CLASS ***",
+                    "",
+                    "REASON FOR THIS EXCEPTION:",
+                    "--------------------------",
                     "There is a method with name",
                     "  'methodWithParametersAndReturnValue'",
-                    "but its parameters", "  (long, double, String)",
-                    "do not match given parameters", "  (String \"foo\")",
+                    "but its parameters",
+                    "  (long, double, String)",
+                    "do not match given parameters",
+                    "  (String \"foo\")",
                     "in target class",
                     "  'org.jreflect.methods.fixture.ClassWithStaticMethods'.",
-                    "", hierarchyOfClassWithStaticMethods(), "\n");
+                    "",
+                    hierarchyOfClassWithStaticMethods(),
+                    "Are you sure you intended to invoke method in(<Class<?> || Object>)",
+                    "  at org.jreflect.exceptions.IncorrectUsageOfStaticMethodsExceptionTest.niceErrorMessageFromIncorrectNumberOfParamsOnFoundStaticMethod(IncorrectUsageOfStaticMethodsExceptionTest.java:44)",
+                    "with a class (org.jreflect.methods.fixture.ClassWithStaticMethods) instead of an object instance?",
+                    "\n");
             assertEquals(expectedErrorMessage, e.getMessage());
         }
     }
@@ -53,21 +72,30 @@ public class IncorrectUsageOfStaticMethodsExceptionTest {
     @Test
     public void niceErrorMessageFromIncorrectReturnTypeOnFoundStaticMethod() {
         try {
-            method("methodWithParametersAndReturnValue")
-                    .withReturnType(String.class)
-                    .in(ClassWithStaticMethods.class).invoke(1, 2, "gurp");
+            method("methodWithParametersAndReturnValue").withReturnType(String.class).in(ClassWithStaticMethods.class).invoke(1, 2, "gurp");
             fail();
         } catch (final ReflectException e) {
-            final String expectedErrorMessage = lines("",
-                    "*** METHOD NOT FOUND BY RETURN TYPE FROM CLASS ***", "",
-                    "REASON FOR THIS EXCEPTION:", "--------------------------",
+            final String expectedErrorMessage = lines(
+                    "",
+                    "*** STATIC METHOD NOT FOUND BY RETURN TYPE FROM CLASS ***",
+                    "",
+                    "REASON FOR THIS EXCEPTION:",
+                    "--------------------------",
                     "There is a method with name",
                     "  'methodWithParametersAndReturnValue'",
-                    "and its parameters match", "but its return type",
-                    "  (void)", "does not match the given return type",
-                    "  (String)", "in target class",
+                    "and its parameters match",
+                    "but its return type",
+                    "  (void)",
+                    "does not match the given return type",
+                    "  (String)",
+                    "in target class",
                     "  'org.jreflect.methods.fixture.ClassWithStaticMethods'.",
-                    "", hierarchyOfClassWithStaticMethods(), "\n");
+                    "",
+                    hierarchyOfClassWithStaticMethods(),
+                    "Are you sure you intended to invoke method in(<Class<?> || Object>)",
+                    "  at org.jreflect.exceptions.IncorrectUsageOfStaticMethodsExceptionTest.niceErrorMessageFromIncorrectReturnTypeOnFoundStaticMethod(IncorrectUsageOfStaticMethodsExceptionTest.java:75)",
+                    "with a class (org.jreflect.methods.fixture.ClassWithStaticMethods) instead of an object instance?",
+                    "\n");
             assertEquals(expectedErrorMessage, e.getMessage());
         }
     }
@@ -83,7 +111,7 @@ public class IncorrectUsageOfStaticMethodsExceptionTest {
 
     private String hierarchyOfClassWithStaticMethods() {
         return lines(
-                "EXISTING METHODS IN THE TARGET CLASS HIERARCHY:",
+                "EXISTING STATIC METHODS IN THE TARGET CLASS HIERARCHY:",
                 "-----------------------------------------------",
                 "Methods declared in the target class",
                 "(org.jreflect.methods.fixture.ClassWithStaticMethods)",

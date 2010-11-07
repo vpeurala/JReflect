@@ -1,5 +1,7 @@
 package org.jreflect.domain;
 
+import org.jreflect.exception.StackTraces;
+
 public class RField {
     private final String name;
 
@@ -12,10 +14,14 @@ public class RField {
     }
 
     public RFieldWithTarget in(final Object targetObject) {
-        if (targetObject instanceof Class<?>) {
-            return in((Class<?>) targetObject);
-        } else {
-            return new RFieldWithTarget(name, targetObject);
+        try {
+            if (targetObject instanceof Class<?>) {
+                return in((Class<?>) targetObject);
+            } else {
+                return new RFieldWithTarget(name, targetObject);
+            }
+        } finally {
+            StackTraces.store("in");
         }
     }
 

@@ -1,5 +1,7 @@
 package org.jreflect.domain;
 
+import org.jreflect.exception.StackTraces;
+
 public class RMethodWithReturnType<ReturnType> {
     private final String methodName;
     private final Class<ReturnType> returnType;
@@ -12,17 +14,25 @@ public class RMethodWithReturnType<ReturnType> {
 
     public RMethodWithReturnTypeAndTarget<ReturnType> in(
             final Class<?> targetClass) {
-        return new RMethodWithReturnTypeAndTarget<ReturnType>(methodName,
-                targetClass, returnType);
+        try {
+            return new RMethodWithReturnTypeAndTarget<ReturnType>(methodName,
+                    targetClass, returnType);
+        } finally {
+            StackTraces.store("in");
+        }
     }
 
     public RMethodWithReturnTypeAndTarget<ReturnType> in(
             final Object targetObject) {
-        if (targetObject instanceof Class<?>) {
-            return in((Class<?>) targetObject);
-        } else {
-            return new RMethodWithReturnTypeAndTarget<ReturnType>(methodName,
-                    targetObject, returnType);
+        try {
+            if (targetObject instanceof Class<?>) {
+                return in((Class<?>) targetObject);
+            } else {
+                return new RMethodWithReturnTypeAndTarget<ReturnType>(
+                        methodName, targetObject, returnType);
+            }
+        } finally {
+            StackTraces.store("in");
         }
     }
 }
