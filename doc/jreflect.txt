@@ -1,0 +1,20 @@
+JReflect
+========
+Ville Peurala <ville.peurala@gmail.com>
+v1.0, December 2010:
+First version.
+
+Introduction
+------------
+
+There are many reflection libraries out there, but JReflect is the best.
+
+Look at this:
+
+[source,java]
+String bar = JReflect.on(String.class).method("getFoo").invoke();
+bar.toByteArray();
+JReflect.on(bar).method("toByteArray").invoke();
+
+That was a second example.
+
