@@ -101,40 +101,6 @@ public class IncorrectUsageOfStaticMethodsExceptionTest {
         }
     }
 
-    // FIXME VP 29.12.2010
-    @Test
-    public void see() {
-        try {
-            method("methodWithParametersAndReturnValue")
-                    .withReturnType(String.class)
-                    .in(ClassWithStaticMethods.class).invoke(1, 2, "gurp");
-            fail();
-        } catch (final ReflectException e) {
-            final String expectedErrorMessage = lines(
-                    "",
-                    "*** STATIC METHOD NOT FOUND BY RETURN TYPE FROM CLASS ***",
-                    "",
-                    "REASON FOR THIS EXCEPTION:",
-                    "--------------------------",
-                    "There is a method with name",
-                    "  'methodWithParametersAndReturnValue'",
-                    "and its parameters match",
-                    "but its return type",
-                    "  (void)",
-                    "does not match the given return type",
-                    "  (String)",
-                    "in target class",
-                    "  'org.jreflect.methods.fixture.ClassWithStaticMethods'.",
-                    "",
-                    hierarchyOfClassWithStaticMethods(),
-                    "Are you sure you intended to invoke method in(<Class<?> || Object>)",
-                    "  at org.jreflect.exceptions.IncorrectUsageOfStaticMethodsExceptionTest.see(IncorrectUsageOfStaticMethodsExceptionTest.java:110)",
-                    "with a class (org.jreflect.methods.fixture.ClassWithStaticMethods) instead of an object instance?",
-                    "\n");
-            assertEquals(expectedErrorMessage, e.getMessage());
-        }
-    }
-
     private String hierarchyOfClassWithStaticMethods() {
         return lines(
                 "EXISTING STATIC METHODS IN THE TARGET CLASS HIERARCHY:",
