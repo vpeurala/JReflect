@@ -8,6 +8,7 @@ TODO:
 + Invoking varargs methods & constructors
 + Using class java.lang.Void explicitly as return type
 + Invoke with single null parameter
++ Remove unnecessary dependencies to other projects
 
 HALFWAY DONE:
 -------------
