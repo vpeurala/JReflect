@@ -71,9 +71,7 @@ public class IncorrectUsageOfStaticMethodsExceptionTest {
     @Test
     public void niceErrorMessageFromIncorrectReturnTypeOnFoundStaticMethod() {
         try {
-            method("methodWithParametersAndReturnValue")
-                    .withReturnType(String.class)
-                    .in(ClassWithStaticMethods.class).invoke(1, 2, "gurp");
+            method("methodWithParametersAndReturnValue").withReturnType(String.class).in(ClassWithStaticMethods.class).invoke(1, 2, "gurp");
             fail();
         } catch (final ReflectException e) {
             final String expectedErrorMessage = lines(
@@ -94,7 +92,7 @@ public class IncorrectUsageOfStaticMethodsExceptionTest {
                     "",
                     hierarchyOfClassWithStaticMethods(),
                     "Are you sure you intended to invoke method in(<Class<?> || Object>)",
-                    "  at org.jreflect.exceptions.IncorrectUsageOfStaticMethodsExceptionTest.niceErrorMessageFromIncorrectReturnTypeOnFoundStaticMethod(IncorrectUsageOfStaticMethodsExceptionTest.java:76)",
+                    "  at org.jreflect.exceptions.IncorrectUsageOfStaticMethodsExceptionTest.niceErrorMessageFromIncorrectReturnTypeOnFoundStaticMethod(IncorrectUsageOfStaticMethodsExceptionTest.java:74)",
                     "with a class (org.jreflect.methods.fixture.ClassWithStaticMethods) instead of an object instance?",
                     "\n");
             assertEquals(expectedErrorMessage, e.getMessage());
