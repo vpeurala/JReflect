@@ -66,17 +66,13 @@ public class CodebaseBuilder {
 
     private File knownClassPathRootFor(final File entry) {
         if (isUnderAKnownClasspathRoot(entry)) {
-            return new File(
-                    "/home/vpeurala/Projects/ELISA/omaelisa-full-2/sms/.eclipse_classes/");
+            return new File("...");
         } else {
             throw new RuntimeException(entry.getAbsolutePath());
         }
     }
 
     private boolean isUnderAKnownClasspathRoot(final File entry) {
-        return entry
-                .getAbsolutePath()
-                .startsWith(
-                        "/home/vpeurala/Projects/ELISA/omaelisa-full-2/sms/.eclipse_classes/");
+        return entry.getAbsolutePath().startsWith("...");
     }
 }
